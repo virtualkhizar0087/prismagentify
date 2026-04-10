@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Where to Paste Prompts — Lovable & Claude Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0e14;
+  --s1: #13161f;
+  --s2: #1a1e2a;
+  --s3: #202535;
+  --border: rgba(255,255,255,0.07);
+  --gold: #f5c842;
+  --cyan: #38bdf8;
+  --green: #4ade80;
+  --red: #f87171;
+  --purple: #c084fc;
+  --pink: #fb7185;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --lovable: #f97316;
+  --claude: #d4a853;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:14px;line-height:1.6;overflow-x:hidden;}
+
+/* TOP BANNER */
+.banner{background:linear-gradient(135deg,#1a1e2a 0%,#0c0e14 100%);border-bottom:1px solid var(--border);padding:36px 48px;}
+.banner h1{font-size:clamp(28px,4vw,52px);font-weight:700;color:var(--text);line-height:1.1;margin-bottom:10px;}
+.banner h1 em{font-style:normal;color:var(--gold);}
+.banner p{color:var(--muted);font-size:14px;max-width:560px;}
+
+/* NAV PILLS */
+.pills{display:flex;gap:8px;padding:20px 48px;background:var(--s1);border-bottom:1px solid var(--border);overflow-x:auto;flex-wrap:wrap;}
+.pill{padding:8px 20px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:0.04em;cursor:pointer;border:1.5px solid;transition:all 0.2s;white-space:nowrap;}
+.pill-c{border-color:var(--claude);color:var(--claude);}
+.pill-c.on,.pill-c:hover{background:var(--claude);color:#000;}
+.pill-l{border-color:var(--lovable);color:var(--lovable);}
+.pill-l.on,.pill-l:hover{background:var(--lovable);color:#fff;}
+.pill-b{border-color:var(--cyan);color:var(--cyan);}
+.pill-b.on,.pill-b:hover{background:var(--cyan);color:#000;}
+
+/* CONTENT */
+.content{max-width:1100px;margin:0 auto;padding:40px 48px;}
+.section{display:none;}
+.section.on{display:block;animation:fadeUp 0.35s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* BIG LABEL */
+.big-label{display:inline-flex;align-items:center;gap:10px;padding:6px 16px;border-radius:6px;font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:20px;}
+.bl-claude{background:rgba(212,168,83,0.12);border:1px solid rgba(212,168,83,0.3);color:var(--claude);}
+.bl-lovable{background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.3);color:var(--lovable);}
+
+/* STEP SYSTEM */
+.steps{display:flex;flex-direction:column;gap:0;}
+.step{display:grid;grid-template-columns:52px 1fr;gap:0;position:relative;}
+.step:not(:last-child)::after{content:'';position:absolute;left:25px;top:52px;bottom:0;width:2px;background:var(--border);}
+.step-num{width:52px;padding-top:16px;display:flex;flex-direction:column;align-items:center;gap:0;}
+.num-circle{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;}
+.nc-claude{background:rgba(212,168,83,0.15);border:2px solid var(--claude);color:var(--claude);}
+.nc-lovable{background:rgba(249,115,22,0.15);border:2px solid var(--lovable);color:var(--lovable);}
+.step-body{padding:12px 0 32px 20px;}
+.step-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.step-desc{font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.7;}
+
+/* MOCK UI */
+.mock{border-radius:10px;overflow:hidden;border:1px solid var(--border);margin-bottom:10px;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+.mock-bar{height:32px;display:flex;align-items:center;gap:8px;padding:0 14px;}
+.mock-bar-claude{background:#1a1714;}
+.mock-bar-lovable{background:#1a1309;}
+.dot-r{width:10px;height:10px;border-radius:50%;background:#ff5f57;}
+.dot-y{width:10px;height:10px;border-radius:50%;background:#febc2e;}
+.dot-g{width:10px;height:10px;border-radius:50%;background:#28c840;}
+.url-bar{flex:1;background:rgba(255,255,255,0.06);border-radius:4px;height:18px;display:flex;align-items:center;padding:0 10px;font-size:10px;color:var(--muted);font-family:'Fira Code',monospace;}
+.mock-body{background:var(--s1);padding:20px;}
+
+/* CHAT MOCK */
+.chat-window{background:#0f1117;border-radius:8px;overflow:hidden;}
+.chat-header{background:#161b27;padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
+.claude-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#b87333,#d4a853);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#000;}
+.chat-name{font-size:13px;font-weight:600;color:var(--text);}
+.chat-status{font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px;}
+.chat-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);}
+.chat-msgs{padding:16px;display:flex;flex-direction:column;gap:12px;min-height:120px;}
+.msg{max-width:80%;font-size:12px;line-height:1.6;padding:10px 14px;border-radius:8px;}
+.msg-ai{background:var(--s2);color:var(--text);align-self:flex-start;border-bottom-left-radius:2px;}
+.msg-user{background:rgba(212,168,83,0.15);color:var(--text);align-self:flex-end;border-bottom-right-radius:2px;border:1px solid rgba(212,168,83,0.2);}
+.chat-input-area{border-top:1px solid var(--border);padding:12px 16px;display:flex;align-items:flex-end;gap:10px;}
+.chat-input-mock{flex:1;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--text);min-height:60px;display:flex;align-items:flex-start;}
+.input-placeholder{color:var(--muted);font-size:12px;}
+
+/* HIGHLIGHT ARROW */
+.arrow-point{display:flex;align-items:flex-start;gap:12px;background:rgba(245,200,66,0.06);border:1px solid rgba(245,200,66,0.2);border-radius:8px;padding:14px 16px;margin:8px 0;}
+.arrow-icon{font-size:20px;flex-shrink:0;margin-top:2px;}
+.arrow-text{font-size:13px;color:var(--text);line-height:1.6;}
+.arrow-text strong{color:var(--gold);}
+
+.arrow-point.orange{background:rgba(249,115,22,0.06);border-color:rgba(249,115,22,0.2);}
+.arrow-point.orange .arrow-text strong{color:var(--lovable);}
+.arrow-point.green{background:rgba(74,222,128,0.06);border-color:rgba(74,222,128,0.2);}
+.arrow-point.green .arrow-text strong{color:var(--green);}
+.arrow-point.cyan{background:rgba(56,189,248,0.06);border-color:rgba(56,189,248,0.2);}
+.arrow-point.cyan .arrow-text strong{color:var(--cyan);}
+
+/* LOVABLE MOCK */
+.lov-window{background:#0d1117;border-radius:8px;overflow:hidden;display:grid;grid-template-columns:240px 1fr;}
+.lov-sidebar{background:#111827;border-right:1px solid var(--border);padding:16px;}
+.lov-sidebar-title{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:12px;}
+.lov-file{font-size:11px;color:var(--muted);padding:4px 8px;border-radius:4px;display:flex;align-items:center;gap:6px;cursor:pointer;}
+.lov-file:hover{background:rgba(255,255,255,0.05);color:var(--text);}
+.lov-file-icon{font-size:10px;}
+.lov-main{display:flex;flex-direction:column;}
+.lov-preview{flex:1;background:#0c0e14;padding:16px;border-bottom:1px solid var(--border);min-height:120px;display:flex;align-items:center;justify-content:center;}
+.lov-preview-text{font-size:11px;color:var(--muted);text-align:center;}
+.lov-chat{padding:12px 16px;background:#111827;display:flex;gap:10px;align-items:flex-end;}
+.lov-input-mock{flex:1;background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--muted);min-height:56px;}
+.lov-send{width:36px;height:36px;border-radius:8px;background:var(--lovable);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;cursor:pointer;flex-shrink:0;}
+
+/* CODE MOCK */
+.code-file{background:#0d1117;border-radius:8px;overflow:hidden;}
+.code-file-bar{background:#161b27;padding:8px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.code-file-name{font-size:11px;font-family:'Fira Code',monospace;color:var(--muted);}
+.code-file-name.active{color:var(--text);}
+.code-body{padding:16px;font-family:'Fira Code',monospace;font-size:11.5px;line-height:1.8;color:#94a3b8;}
+.kw{color:#c084fc;}.str{color:#86efac;}.fn{color:#38bdf8;}.cm{color:#475569;font-style:italic;}
+
+/* PROMPT DISPLAY */
+.prompt-display{background:#060910;border:1px solid rgba(56,189,248,0.2);border-radius:8px;padding:16px 20px;font-family:'Fira Code',monospace;font-size:11.5px;color:#a5f3fc;line-height:1.8;position:relative;margin:10px 0;}
+.prompt-display::before{content:'YOUR PROMPT';position:absolute;top:-10px;left:16px;background:var(--s2);padding:0 8px;font-size:9px;letter-spacing:0.15em;color:var(--cyan);font-family:'Space Grotesk',sans-serif;}
+.copy-btn{position:absolute;top:10px;right:10px;background:rgba(56,189,248,0.1);border:1px solid rgba(56,189,248,0.3);color:var(--cyan);font-size:10px;padding:4px 12px;cursor:pointer;border-radius:4px;font-family:'Space Grotesk',sans-serif;letter-spacing:0.05em;}
+.copy-btn:hover{background:rgba(56,189,248,0.2);}
+
+/* COMPARISON TABLE */
+.ct{width:100%;border-collapse:collapse;margin:20px 0;}
+.ct th{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--border);text-align:left;}
+.ct td{padding:11px 14px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px;vertical-align:top;}
+.ct tr:hover td{background:rgba(255,255,255,0.02);}
+.yes{color:var(--green);font-weight:600;}
+.no{color:var(--red);}
+.ok{color:var(--gold);}
+
+/* BADGE */
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:0.06em;}
+.badge-claude{background:rgba(212,168,83,0.15);color:var(--claude);border:1px solid rgba(212,168,83,0.3);}
+.badge-lovable{background:rgba(249,115,22,0.15);color:var(--lovable);border:1px solid rgba(249,115,22,0.3);}
+.badge-both{background:rgba(56,189,248,0.15);color:var(--cyan);border:1px solid rgba(56,189,248,0.3);}
+
+/* TIP BOX */
+.tip{display:flex;gap:12px;background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.2);border-radius:8px;padding:14px 16px;margin:16px 0;}
+.tip-icon{font-size:18px;flex-shrink:0;}
+.tip-text{font-size:13px;color:var(--text);line-height:1.6;}
+.tip-text strong{color:var(--green);}
+
+.warn{background:rgba(251,113,133,0.06);border-color:rgba(251,113,133,0.2);}
+.warn .tip-text strong{color:var(--pink);}
+
+/* SECTION DIVIDER */
+.sdiv{height:1px;background:var(--border);margin:32px 0;}
+
+/* ROUTE MAP */
+.route{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:16px 0;}
+.route-item{background:var(--s2);border:1px solid var(--border);padding:6px 14px;font-family:'Fira Code',monospace;font-size:12px;color:var(--text);}
+.route-item.active{background:rgba(212,168,83,0.12);border-color:rgba(212,168,83,0.4);color:var(--gold);}
+.route-arrow{color:var(--muted);padding:0 6px;font-size:16px;}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .banner,.content,.pills{padding-left:20px;padding-right:20px;}
+  .g2{grid-template-columns:1fr;}
+  .lov-window{grid-template-columns:1fr;}
+  .lov-sidebar{display:none;}
+  h1{font-size:28px;}
+}
+</style>
+</head>
+<body>
+
+<!-- BANNER -->
+<div class="banner">
+  <h1>Where to <em>Paste</em><br>Your Prompts</h1>
+  <p>Exact step-by-step visual guide. Shows you the precise box, button, and field in both Claude and Lovable where every prompt goes.</p>
+</div>
+
+<!-- PILLS NAV -->
+<div class="pills">
+  <button class="pill pill-c on" onclick="showTab('claude',this)">🤖 Claude.ai — Full Guide</button>
+  <button class="pill pill-l" onclick="showTab('lovable',this)">💜 Lovable — Full Guide</button>
+  <button class="pill pill-b" onclick="showTab('compare',this)">⚡ Which One When</button>
+  <button class="pill pill-b" onclick="showTab('workflow',this)">🗺 Complete Workflow</button>
+</div>
+
+<!-- ═══════════════════════ -->
+<!-- TAB 1: CLAUDE -->
+<!-- ═══════════════════════ -->
+<div class="content">
+<div id="claude" class="section on">
+
+  <div class="big-label bl-claude">🤖 Claude.ai — Step by Step</div>
+
+  <div class="steps">
+
+    <!-- STEP 1 -->
+    <div class="step">
+      <div class="step-num"><div class="num-circle nc-claude">1</div></div>
+      <div class="step-body">
+        <div class="step-title">Go to claude.ai and sign in</div>
+        <div class="step-desc">Open your browser. Go to <strong style="color:var(--claude)">claude.ai</strong>. Sign in or create a free account. Upgrade to Pro ($20/month) for best results — gives you access to Claude Sonnet 4.6 which is what you want for coding.</div>
+
+        <div class="mock">
+          <div class="mock-bar mock-bar-claude">
+            <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+            <div class="url-bar">claude.ai</div>
+          </div>
+          <div class="mock-body">
+            <div class="chat-window">
+              <div class="chat-header">
+                <div class="claude-avatar">C</div>
+                <div>
+                  <div class="chat-name">Claude</div>
+                  <div class="chat-status">Online</div>
+                </div>
+              </div>
+              <div class="chat-msgs">
+                <div class="msg msg-ai">Hello! I'm Claude. How can I help you today? I can write code, analyze problems, create content, and much more.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-point">
+          <div class="arrow-icon">👆</div>
+          <div class="arrow-text">You land on this screen. You will see a <strong>chat interface</strong> — exactly like WhatsApp but for AI. This is where everything happens.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+      <div class="step-num"><div class="num-circle nc-claude">2</div></div>
+      <div class="step-body">
+        <div class="step-title">Start a New Chat for each feature</div>
+        <div class="step-desc">On the left sidebar, click <strong style="color:var(--gold)">"New Chat"</strong> button (pencil icon or + button). Each feature you build = a new chat. This keeps your work organized and Claude focused.</div>
+
+        <div class="mock">
+          <div class="mock-bar mock-bar-claude"><div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div><div class="url-bar">claude.ai/chat/new</div></div>
+          <div class="mock-body" style="display:grid;grid-template-columns:200px 1fr;gap:0;">
+            <div style="background:#0d0f14;border-right:1px solid var(--border);padding:12px;">
+              <div style="background:rgba(212,168,83,0.15);border:1px solid rgba(212,168,83,0.3);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--gold);margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:6px;">
+                <span>✏️</span> New Chat
+              </div>
+              <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin:10px 0 6px;padding-left:4px;">Recent</div>
+              <div style="font-size:11px;color:var(--muted);padding:5px 8px;border-radius:4px;">LexAI Project Setup</div>
+              <div style="font-size:11px;color:var(--muted);padding:5px 8px;border-radius:4px;">Contract Analyzer</div>
+              <div style="font-size:11px;color:var(--muted);padding:5px 8px;border-radius:4px;">GDPR Scanner</div>
+            </div>
+            <div style="background:#0f1117;padding:16px;display:flex;align-items:center;justify-content:center;">
+              <div style="text-align:center;color:var(--muted);font-size:13px;">Start a new conversation<br><span style="font-size:11px;color:#384050;">What do you want to build?</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-point">
+          <div class="arrow-icon">👆</div>
+          <div class="arrow-text">Click <strong>"New Chat"</strong> (top left, pencil/plus icon). Name your chats like "LexAI — Contract Analyzer" so you can find them later. Keep one chat per feature.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+      <div class="step-num"><div class="num-circle nc-claude">3</div></div>
+      <div class="step-body">
+        <div class="step-title">THIS is where you paste your prompt ↓</div>
+        <div class="step-desc">At the bottom of the screen there is a <strong style="color:var(--gold)">large text input box</strong>. This is called the "message input." Click it, paste your entire prompt, then press <strong style="color:var(--gold)">Enter</strong> or click the <strong style="color:var(--gold)">Send button (arrow icon ↑)</strong>.</div>
+
+        <div class="mock">
+          <div class="mock-bar mock-bar-claude"><div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div><div class="url-bar">claude.ai</div></div>
+          <div class="mock-body">
+            <div class="chat-window">
+              <div class="chat-msgs" style="min-height:80px;">
+                <div class="msg msg-ai" style="font-size:11px;">Hello! Ready to help you build LexAI. What would you like to create?</div>
+              </div>
+              <div class="chat-input-area" style="position:relative;">
+                <div class="chat-input-mock" style="border-color:rgba(212,168,83,0.5);background:rgba(212,168,83,0.04);">
+                  <div style="font-size:11.5px;color:var(--text);">I am building a SaaS product called LexAI — an AI legal co-pilot for small businesses. Please set up a complete Next.js 14 project with TypeScript, Tailwind CSS, Supabase...</div>
+                </div>
+                <div style="width:36px;height:36px;border-radius:8px;background:var(--claude);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;">
+                  <span style="color:#000;font-size:16px;">↑</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-point">
+          <div class="arrow-icon">⭐</div>
+          <div class="arrow-text"><strong>THIS is the box.</strong> Click anywhere in the large text area at the bottom. Paste your full prompt (Ctrl+V on Windows, Cmd+V on Mac). Press Enter or click the orange/gold arrow button. That's it.</div>
+        </div>
+
+        <div class="tip">
+          <div class="tip-icon">💡</div>
+          <div class="tip-text"><strong>Pro Tip:</strong> For long prompts (like the project setup prompt), use <strong>Shift+Enter</strong> to add new lines inside the box without sending. When you're ready, press plain Enter or click Send.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+      <div class="step-num"><div class="num-circle nc-claude">4</div></div>
+      <div class="step-body">
+        <div class="step-title">Claude responds with code — here's what to do with it</div>
+        <div class="step-desc">Claude will write code for you. The code appears in <strong style="color:var(--gold)">gray code blocks</strong> inside the chat. Each block has a <strong style="color:var(--gold)">"Copy code"</strong> button in the top-right corner of that block.</div>
+
+        <div class="mock">
+          <div class="mock-bar mock-bar-claude"><div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div><div class="url-bar">claude.ai</div></div>
+          <div class="mock-body">
+            <div class="chat-window">
+              <div class="chat-msgs">
+                <div class="msg msg-ai" style="max-width:95%;">
+                  <div style="font-size:12px;margin-bottom:10px;">Here is your Next.js project setup for LexAI. Create this file structure:</div>
+                  <div class="code-file">
+                    <div class="code-file-bar">
+                      <span class="code-file-name active">package.json</span>
+                      <button style="margin-left:auto;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;font-size:10px;padding:3px 10px;cursor:pointer;border-radius:4px;">Copy code</button>
+                    </div>
+                    <div class="code-body">
+<span class="cm">// package.json</span>
+{
+  <span class="str">"name"</span>: <span class="str">"lexai"</span>,
+  <span class="str">"dependencies"</span>: {
+    <span class="str">"next"</span>: <span class="str">"14.0.0"</span>,
+    <span class="str">"@supabase/supabase-js"</span>: <span class="str">"^2.38.0"</span>,
+    <span class="str">"stripe"</span>: <span class="str">"^14.0.0"</span>,
+    <span class="str">"@anthropic-ai/sdk"</span>: <span class="str">"^0.24.0"</span>
+  }
+}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-point">
+          <div class="arrow-icon">👆</div>
+          <div class="arrow-text">See the <strong>"Copy code"</strong> button in the top-right of each code block? Click it. The code is now in your clipboard. Go to VS Code, create the correct file, and paste it (Ctrl+V).</div>
+        </div>
+
+        <div class="tip">
+          <div class="tip-icon">📁</div>
+          <div class="tip-text"><strong>VS Code is free.</strong> Download at code.visualstudio.com. Create a new folder called "lexai". Open it in VS Code. When Claude says "create this file at /app/dashboard/page.tsx" — create that file in VS Code and paste Claude's code into it.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+      <div class="step-num"><div class="num-circle nc-claude">5</div></div>
+      <div class="step-body">
+        <div class="step-title">When you get an error — paste it right back into Claude</div>
+        <div class="step-desc">You will get errors. This is 100% normal. Don't panic. Copy the error message, go back to your Claude chat, and paste this:</div>
+
+        <div class="prompt-display" style="position:relative;">I got this error when running the code:
+[paste your exact error message here]
+
+My current code is:
+[paste the file where the error is]
+
+Please fix it and tell me what was wrong.<button class="copy-btn" onclick="cp(this)">Copy</button></div>
+
+        <div class="tip">
+          <div class="tip-icon">🔄</div>
+          <div class="tip-text"><strong>The loop:</strong> Prompt → Code → Paste into VS Code → Error → Paste error into Claude → Fixed code → Paste again. This is the entire building process. It repeats until the feature works.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end steps -->
+
+  <div class="sdiv"></div>
+
+  <!-- WHERE EACH SPECIFIC PROMPT GOES -->
+  <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:16px;">📋 Exactly Which Prompt Goes in Which Claude Chat</div>
+
+  <table class="ct">
+    <thead><tr><th>Prompt Name</th><th>Chat Name to Create</th><th>Where in Claude</th><th>What to do with output</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-claude">Claude</span><br><strong>Project Setup</strong></td>
+        <td style="font-family:'Fira Code',monospace;font-size:12px;color:var(--gold)">LexAI — Project Setup</td>
+        <td>New Chat → paste full prompt → Send</td>
+        <td>Copy each code block → paste into VS Code as separate files</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-claude">Claude</span><br><strong>Contract Analyzer</strong></td>
+        <td style="font-family:'Fira Code',monospace;font-size:12px;color:var(--gold)">LexAI — Contract Feature</td>
+        <td>New Chat → paste prompt → Send</td>
+        <td>3 code blocks will appear: page.tsx, route.ts, component. Copy each to correct file.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-claude">Claude</span><br><strong>AI Legal Chat</strong></td>
+        <td style="font-family:'Fira Code',monospace;font-size:12px;color:var(--gold)">LexAI — Chat Feature</td>
+        <td>New Chat → paste prompt → Send</td>
+        <td>Multiple files. Ask Claude: "list all the files I need to create" then copy each.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-claude">Claude</span><br><strong>GDPR Scanner</strong></td>
+        <td style="font-family:'Fira Code',monospace;font-size:12px;color:var(--gold)">LexAI — GDPR Feature</td>
+        <td>New Chat → paste prompt → Send</td>
+        <td>Same process. Ask "what files do I create first?"</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-claude">Claude</span><br><strong>Stripe Payments</strong></td>
+        <td style="font-family:'Fira Code',monospace;font-size:12px;color:var(--gold)">LexAI — Payments</td>
+        <td>New Chat → paste prompt → Send</td>
+        <td>Follow Claude's step-by-step. It will ask you for your Stripe key — you paste it when asked.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-claude">Claude</span><br><strong>LinkedIn Posts</strong></td>
+        <td style="font-family:'Fira Code',monospace;font-size:12px;color:var(--gold)">LexAI — Marketing</td>
+        <td>New Chat → paste marketing prompt → Send</td>
+        <td>Claude returns 12 posts. Copy each to a Notion doc. Schedule with Buffer/Hypefury.</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div><!-- end claude section -->
+
+<!-- ═══════════════════════ -->
+<!-- TAB 2: LOVABLE -->
+<!-- ═══════════════════════ -->
+<div id="lovable" class="section">
+
+  <div class="big-label bl-lovable">💜 Lovable — Step by Step</div>
+
+  <div class="tip">
+    <div class="tip-icon">👋</div>
+    <div class="tip-text"><strong>Use Lovable if you cannot code at all.</strong> Lovable is like talking to a builder — you describe your app in plain English and it builds the entire thing, deploys it live, sets up the database, and handles authentication. No VS Code needed. No terminal. Just type and click.</div>
+  </div>
+
+  <div class="steps">
+
+    <!-- STEP 1 -->
+    <div class="step">
+      <div class="step-num"><div class="num-circle nc-lovable">1</div></div>
+      <div class="step-body">
+        <div class="step-title">Go to lovable.dev and create account</div>
+        <div class="step-desc">Open your browser. Go to <strong style="color:var(--lovable)">lovable.dev</strong>. Sign up with Google. Choose the <strong style="color:var(--lovable)">Starter plan ($20/month)</strong> — gives you 100 credits/month which is enough to build LexAI MVP.</div>
+
+        <div class="mock">
+          <div class="mock-bar mock-bar-lovable"><div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div><div class="url-bar">lovable.dev</div></div>
+          <div class="mock-body" style="text-align:center;padding:30px;">
+            <div style="font-size:24px;margin-bottom:8px;">💜</div>
+            <div style="font-size:18px;font-weight:700;color:var(--text);margin-bottom:6px;">Welcome to Lovable</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:20px;">Build apps with AI. No code required.</div>
+            <div style="display:flex;gap:10px;justify-content:center;">
+              <button style="background:var(--lovable);color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:13px;cursor:pointer;font-weight:600;">Sign up with Google</button>
+              <button style="background:var(--s2);color:var(--text);border:1px solid var(--border);padding:10px 24px;border-radius:8px;font-size:13px;cursor:pointer;">Sign in</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+      <div class="step-num"><div class="num-circle nc-lovable">2</div></div>
+      <div class="step-body">
+        <div class="step-title">Click "New Project" — give it a name</div>
+        <div class="step-desc">After signing in, click <strong style="color:var(--lovable)">"+ New Project"</strong> button (top right or center of dashboard). Name it <strong style="color:var(--lovable)">"LexAI"</strong>. This creates a new workspace for your app.</div>
+
+        <div class="mock">
+          <div class="mock-bar mock-bar-lovable"><div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div><div class="url-bar">lovable.dev/dashboard</div></div>
+          <div class="mock-body">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+              <div style="font-size:14px;font-weight:600;color:var(--text);">My Projects</div>
+              <button style="background:var(--lovable);color:#fff;border:none;padding:8px 18px;border-radius:6px;font-size:13px;cursor:pointer;font-weight:600;">+ New Project</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <div style="background:rgba(249,115,22,0.08);border:2px dashed rgba(249,115,22,0.3);border-radius:8px;padding:20px;text-align:center;color:var(--lovable);cursor:pointer;">
+                <div style="font-size:24px;margin-bottom:6px;">+</div>
+                <div style="font-size:12px;">Create new project</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-point orange">
+          <div class="arrow-icon">👆</div>
+          <div class="arrow-text">Click <strong>"+ New Project"</strong>. A dialog appears. Type <strong>"LexAI"</strong> as the project name. Click Create.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+      <div class="step-num"><div class="num-circle nc-lovable">3</div></div>
+      <div class="step-body">
+        <div class="step-title">THIS is where you paste your prompt in Lovable ↓</div>
+        <div class="step-desc">Inside your project, you see a <strong style="color:var(--lovable)">chat box at the bottom</strong> (just like Claude). This is Lovable's build interface. Type or paste your prompt here. Lovable builds the entire app and shows a live preview on the right.</div>
+
+        <div class="mock">
+          <div class="mock-bar mock-bar-lovable"><div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div><div class="url-bar">lovable.dev/projects/lexai</div></div>
+          <div class="mock-body" style="padding:0;">
+            <div class="lov-window">
+              <div class="lov-sidebar">
+                <div class="lov-sidebar-title">Files</div>
+                <div class="lov-file"><span class="lov-file-icon">📁</span> src/</div>
+                <div class="lov-file"><span class="lov-file-icon">📄</span> App.tsx</div>
+                <div class="lov-file"><span class="lov-file-icon">📄</span> components/</div>
+                <div class="lov-file"><span class="lov-file-icon">📄</span> pages/</div>
+                <div class="lov-sidebar-title" style="margin-top:16px;">Database</div>
+                <div class="lov-file"><span class="lov-file-icon">🗄️</span> Supabase connected</div>
+              </div>
+              <div class="lov-main">
+                <div class="lov-preview">
+                  <div class="lov-preview-text">📱 Live preview appears here<br><span style="font-size:10px;">Updates in real-time as you build</span></div>
+                </div>
+                <div class="lov-chat" style="position:relative;">
+                  <div class="lov-input-mock" style="border-color:rgba(249,115,22,0.5);background:rgba(249,115,22,0.04);">
+                    <span style="color:var(--text);font-size:11.5px;">Build a SaaS app called LexAI — an AI legal co-pilot for small businesses. I need: 1) User signup/login, 2) A dashboard where users can upload contracts, 3) Show the contract text after upload, 4) A chat interface where they can ask legal questions...</span>
+                  </div>
+                  <div class="lov-send">↑</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow-point orange">
+          <div class="arrow-icon">⭐</div>
+          <div class="arrow-text"><strong>THIS chat box at the bottom is where you paste your prompt.</strong> Click inside it. Paste your prompt (Ctrl+V or Cmd+V). Press Enter or click the orange Send button. Lovable builds the entire page and shows a live preview instantly.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step">
+      <div class="step-num"><div class="num-circle nc-lovable">4</div></div>
+      <div class="step-body">
+        <div class="step-title">Connect Supabase (database) — one click</div>
+        <div class="step-desc">When Lovable builds something that needs a database, a banner appears: <strong style="color:var(--lovable)">"Connect to Supabase"</strong>. Click it. Sign in to Supabase (free account). Lovable automatically sets up your database, tables, and authentication. You don't write a single line of database code.</div>
+
+        <div class="arrow-point orange">
+          <div class="arrow-icon">🗄️</div>
+          <div class="arrow-text">When you see the <strong>"Connect Supabase"</strong> banner — click it. Create a free Supabase account at supabase.com. Authorize the connection. Done. Your database is live.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step">
+      <div class="step-num"><div class="num-circle nc-lovable">5</div></div>
+      <div class="step-body">
+        <div class="step-title">Iterate: describe what to change in plain English</div>
+        <div class="step-desc">After Lovable builds something, you can keep typing in the same chat box to change it. Just describe what you want differently — no code needed.</div>
+
+        <div class="prompt-display" style="position:relative;">
+The button color should be dark blue, not orange.
+
+Add a navigation menu at the top with: Dashboard, Contracts, Chat, Settings.
+
+Make the contract upload area bigger and add a drag-and-drop zone.
+
+Add a "Risk Score" badge next to each contract that shows High/Medium/Low.<button class="copy-btn" onclick="cp(this)">Copy</button>
+        </div>
+
+        <div class="tip">
+          <div class="tip-icon">🎨</div>
+          <div class="tip-text"><strong>Lovable's power:</strong> You just describe changes in plain English. "Make the header darker." "Move the button to the right." "Add a loading spinner." Lovable updates the code and shows you the new preview immediately.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step">
+      <div class="step-num"><div class="num-circle nc-lovable">6</div></div>
+      <div class="step-body">
+        <div class="step-title">Deploy your app live — one click</div>
+        <div class="step-desc">When you're ready to share with users, click the <strong style="color:var(--lovable)">"Publish"</strong> button (top right). Lovable gives you a live URL like <strong style="color:var(--lovable)">lexai.lovable.app</strong> that anyone can access. You can also connect your custom domain (lexai.com).</div>
+
+        <div class="arrow-point orange">
+          <div class="arrow-icon">🚀</div>
+          <div class="arrow-text">Click <strong>"Publish"</strong> → your app is live on the internet in 30 seconds. Share the URL with beta users. This is your MVP. From idea to live app in one afternoon.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end steps -->
+
+  <div class="sdiv"></div>
+
+  <!-- EXACT PROMPTS FOR LOVABLE -->
+  <div style="font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;">💜 The Exact Prompt to Start Your LexAI MVP in Lovable</div>
+  <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Paste this as your very first message in a new Lovable project:</div>
+
+  <div class="prompt-display" style="position:relative;">
+Build a SaaS web app called LexAI — an AI legal co-pilot for small businesses.
+
+The app should have:
+
+1. LANDING PAGE (/) 
+- Hero: "Your AI Legal Co-Pilot. Save $5,000/year on legal fees."
+- Features list: Contract Review, Legal Q&A, Document Generation, GDPR Scanner
+- Pricing: $49/mo Starter, $99/mo Pro, $299/mo Team
+- "Start Free Trial" CTA button
+
+2. AUTH PAGES (/login and /signup)
+- Email + password signup
+- Google login button
+- After signup → redirect to /dashboard
+
+3. DASHBOARD (/dashboard)
+- Sidebar navigation: Dashboard, Contracts, Chat, Documents, Settings
+- Dashboard home: 3 stat cards (Contracts Reviewed, Documents Created, Questions Asked)
+- Recent activity feed
+
+4. CONTRACTS PAGE (/dashboard/contracts)
+- Large file upload area (drag and drop PDF)
+- After upload: show filename and "Analyzing..." state
+- Results card showing: Risk Score badge (High/Medium/Low), Summary text, list of red flags
+
+5. CHAT PAGE (/dashboard/chat)  
+- Chat interface similar to ChatGPT
+- Message history on the left
+- Jurisdiction dropdown at top: "US Federal / California / UK / Germany / EU"
+- Input box at bottom
+- Suggested questions when empty
+
+6. DOCUMENTS PAGE (/dashboard/documents)
+- Grid of document type cards: NDA, Employment Contract, Freelancer Agreement, Terms of Service
+- Click any card → opens a form to fill in details
+- "Generate Document" button
+
+Use: React, Tailwind CSS, Supabase for auth and database.
+Color scheme: Dark navy/slate background with gold/amber accents.
+Make it look professional and modern like a premium SaaS product.
+<button class="copy-btn" onclick="cp(this)">Copy</button>
+  </div>
+
+  <div class="tip" style="margin-top:16px;">
+    <div class="tip-icon">⚡</div>
+    <div class="tip-text"><strong>What happens next:</strong> Lovable builds your entire app — all 6 pages with working navigation. Probably takes 2–3 minutes. You'll see it appear live in the preview panel. Then type follow-up messages to connect the Claude API, add real functionality to each feature.</div>
+  </div>
+
+</div><!-- end lovable section -->
+
+<!-- ═══════════════════════ -->
+<!-- TAB 3: COMPARE -->
+<!-- ═══════════════════════ -->
+<div id="compare" class="section">
+
+  <div style="font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px;">⚡ Which Tool for Which Task</div>
+  <div style="font-size:13px;color:var(--muted);margin-bottom:24px;">The honest answer — use this as your decision guide every day.</div>
+
+  <table class="ct">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th><span style="color:var(--claude)">Claude.ai</span></th>
+        <th><span style="color:var(--lovable)">Lovable</span></th>
+        <th>Winner</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Building full app from scratch (no coding)</strong></td>
+        <td class="no">✗ You still need VS Code to paste code</td>
+        <td class="yes">✓ Builds entire app + deploys automatically</td>
+        <td><span class="badge badge-lovable">Lovable</span></td>
+      </tr>
+      <tr>
+        <td><strong>Connecting Claude API to your product</strong></td>
+        <td class="yes">✓ Writes exact API integration code</td>
+        <td class="ok">~ Can do it but needs more guidance</td>
+        <td><span class="badge badge-claude">Claude</span></td>
+      </tr>
+      <tr>
+        <td><strong>Writing marketing content / LinkedIn posts</strong></td>
+        <td class="yes">✓ Native strength</td>
+        <td class="no">✗ Not designed for content writing</td>
+        <td><span class="badge badge-claude">Claude</span></td>
+      </tr>
+      <tr>
+        <td><strong>Fixing bugs and errors</strong></td>
+        <td class="yes">✓ Paste error → instant fix with explanation</td>
+        <td class="yes">✓ Describe the bug → fixes automatically</td>
+        <td><span class="badge badge-both">Both work</span></td>
+      </tr>
+      <tr>
+        <td><strong>Adding UI changes (colors, layout)</strong></td>
+        <td class="ok">~ Gives you code, you paste it</td>
+        <td class="yes">✓ "Make the button blue" → done instantly</td>
+        <td><span class="badge badge-lovable">Lovable</span></td>
+      </tr>
+      <tr>
+        <td><strong>Building the AI prompts for your product</strong></td>
+        <td class="yes">✓ Claude writes its own system prompts</td>
+        <td class="no">✗ Not designed for this</td>
+        <td><span class="badge badge-claude">Claude</span></td>
+      </tr>
+      <tr>
+        <td><strong>Deploying your app live</strong></td>
+        <td class="no">✗ Need Vercel separately</td>
+        <td class="yes">✓ One-click publish included</td>
+        <td><span class="badge badge-lovable">Lovable</span></td>
+      </tr>
+      <tr>
+        <td><strong>Setting up database + auth</strong></td>
+        <td class="ok">~ Writes Supabase code, you set it up</td>
+        <td class="yes">✓ Auto-connects Supabase with one click</td>
+        <td><span class="badge badge-lovable">Lovable</span></td>
+      </tr>
+      <tr>
+        <td><strong>Pitch deck / investor materials</strong></td>
+        <td class="yes">✓ Writes full pitch, financial models</td>
+        <td class="no">✗ Not designed for this</td>
+        <td><span class="badge badge-claude">Claude</span></td>
+      </tr>
+      <tr>
+        <td><strong>Strategy, roadmap planning</strong></td>
+        <td class="yes">✓ Native strength</td>
+        <td class="no">✗ Not designed for this</td>
+        <td><span class="badge badge-claude">Claude</span></td>
+      </tr>
+      <tr>
+        <td><strong>Complex multi-file code changes</strong></td>
+        <td class="ok">~ Possible but manual copy-paste</td>
+        <td class="yes">✓ Does it automatically</td>
+        <td><span class="badge badge-lovable">Lovable</span></td>
+      </tr>
+      <tr>
+        <td><strong>Understanding what code does</strong></td>
+        <td class="yes">✓ Explains any code in plain English</td>
+        <td class="ok">~ Shows code but less explanation</td>
+        <td><span class="badge badge-claude">Claude</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="g2">
+    <div style="background:rgba(212,168,83,0.06);border:1px solid rgba(212,168,83,0.2);border-radius:10px;padding:20px;">
+      <div style="font-size:16px;font-weight:700;color:var(--claude);margin-bottom:10px;">🤖 Use Claude.ai for:</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:13px;color:var(--text);display:flex;gap:8px;"><span style="color:var(--green)">✓</span> All writing — marketing, emails, pitch</li>
+        <li style="font-size:13px;color:var(--text);display:flex;gap:8px;"><span style="color:var(--green)">✓</span> Strategy decisions and planning</li>
+        <li style="font-size:13px;color:var(--text);display:flex;gap:8px;"><span style="color:var(--green)">✓</span> Debugging — paste error, get fix</li>
+        <li style="font-size:13px;color:var(--text);display:flex;gap:8px;"><span style="color:var(--green)">✓</span> Building Claude API prompts for LexAI</li>
+        <li style="font-size:13px;color:var(--text);display:flex;gap:8px;"><span style="color:var(--green)">✓</span> Learning — ask "explain this code to me"</li>
+        <li style="font-size:13px;color:var(--text);display:flex;gap:8px;"><span style="color:var(--green)">✓</span> User interview scripts, outreach DMs</li>
+      </ul>
+    </div>
+    <div style="background:rgba(249,115,22,0.06);border:1px solid rgba(249,115,22,0.2);border-radius:10px;padding:20px;">
+      <div style="font-size:16px;font-weight:700;color:var(--lovable);margin-bottom:10px;">💜 Use Lovable for:</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li style="font-size:13px;color:var(--text);display:flex;gap:8px;"><span style="color:var(--green)">✓</span> Building entire pages from scratch</li>
+        <li style="font-size:13px;color:var(--text);display:flex;gap:8px;"><span style="color:var(--green)">✓</span> Quick UI changes — colors, layout, design</li>
+        <li style="font-size:13px;color:var(--text);display:flex;gap:8px;"><span style="color:var(--green)">✓</span> Setting up Supabase database + auth</li>
+        <li style="font-size:13px;color:var(--text);display:flex;gap:8px;"><span style="color:var(--green)">✓</span> One-click deployment to live URL</li>
+        <li style="font-size:13px;color:var(--text);display:flex;gap:8px;"><span style="color:var(--green)">✓</span> Adding new features visually</li>
+        <li style="font-size:13px;color:var(--text);display:flex;gap:8px;"><span style="color:var(--green)">✓</span> Getting MVP live in 1 day, zero coding</li>
+      </ul>
+    </div>
+  </div>
+
+</div><!-- end compare section -->
+
+<!-- ═══════════════════════ -->
+<!-- TAB 4: WORKFLOW -->
+<!-- ═══════════════════════ -->
+<div id="workflow" class="section">
+
+  <div style="font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px;">🗺 Your Complete Daily Build Workflow</div>
+  <div style="font-size:13px;color:var(--muted);margin-bottom:24px;">Exactly which tool to open, in what order, every day.</div>
+
+  <!-- SCENARIO A -->
+  <div style="background:rgba(212,168,83,0.05);border:1px solid rgba(212,168,83,0.2);border-radius:10px;padding:24px;margin-bottom:20px;">
+    <div style="font-size:16px;font-weight:700;color:var(--gold);margin-bottom:16px;">📍 Scenario A: You can write basic code (or learn as you go)</div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,168,83,0.2);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--gold);flex-shrink:0;">1</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">Open Claude.ai → New Chat named "Today's Build"</div>
+          <div style="font-size:12px;color:var(--muted);">Paste your feature prompt. Get the code back.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,168,83,0.2);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--gold);flex-shrink:0;">2</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">Open VS Code (free) → create the file → paste Claude's code</div>
+          <div style="font-size:12px;color:var(--muted);">Click "Copy code" button in Claude → go to VS Code → paste in the correct file.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,168,83,0.2);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--gold);flex-shrink:0;">3</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">Run the app: type "npm run dev" in VS Code terminal</div>
+          <div style="font-size:12px;color:var(--muted);">Open localhost:3000 in browser. See your app. Test the feature.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,168,83,0.2);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--gold);flex-shrink:0;">4</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">Got an error? Back to Claude → paste error → get fix → paste back</div>
+          <div style="font-size:12px;color:var(--muted);">Repeat until it works. This loop is your entire development process.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(212,168,83,0.2);border:1px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--gold);flex-shrink:0;">5</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">New Claude chat → write today's LinkedIn post</div>
+          <div style="font-size:12px;color:var(--muted);">Ask Claude to write about what you built today. Takes 5 minutes. Post it.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENARIO B -->
+  <div style="background:rgba(249,115,22,0.05);border:1px solid rgba(249,115,22,0.2);border-radius:10px;padding:24px;margin-bottom:20px;">
+    <div style="font-size:16px;font-weight:700;color:var(--lovable);margin-bottom:16px;">📍 Scenario B: You cannot code at all — Lovable first</div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(249,115,22,0.2);border:1px solid var(--lovable);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--lovable);flex-shrink:0;">1</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">Open Lovable.dev → New Project → "LexAI"</div>
+          <div style="font-size:12px;color:var(--muted);">Paste the big LexAI prompt from this guide. Lovable builds everything.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(249,115,22,0.2);border:1px solid var(--lovable);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--lovable);flex-shrink:0;">2</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">Iterate in Lovable's chat: "change X", "add Y", "fix Z"</div>
+          <div style="font-size:12px;color:var(--muted);">Each message = Lovable rebuilds and shows you the updated preview instantly.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(249,115,22,0.2);border:1px solid var(--lovable);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--lovable);flex-shrink:0;">3</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">Need a complex feature? Switch to Claude.ai</div>
+          <div style="font-size:12px;color:var(--muted);">Open Claude.ai → ask "how do I connect the Claude API to my Lovable app?" → follow the steps Claude gives you.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(249,115,22,0.2);border:1px solid var(--lovable);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--lovable);flex-shrink:0;">4</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">Click Publish in Lovable → your app is live</div>
+          <div style="font-size:12px;color:var(--muted);">Share the link with beta users. Get feedback. Come back and iterate.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:28px;height:28px;border-radius:50%;background:rgba(249,115,22,0.2);border:1px solid var(--lovable);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--lovable);flex-shrink:0;">5</div>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);">Use Claude.ai for everything else: marketing, strategy, emails</div>
+          <div style="font-size:12px;color:var(--muted);">Claude is your co-founder. Lovable is your developer. Together they build everything.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE ONE-LINE RULE -->
+  <div style="background:rgba(74,222,128,0.06);border:2px solid rgba(74,222,128,0.3);border-radius:10px;padding:24px;text-align:center;">
+    <div style="font-size:28px;font-weight:700;color:var(--green);margin-bottom:8px;">The One Rule to Remember</div>
+    <div style="font-size:16px;color:var(--text);max-width:600px;margin:0 auto;line-height:1.7;">
+      <strong style="color:var(--gold)">Claude.ai</strong> = your brain, your writer, your strategist, your debugger<br>
+      <strong style="color:var(--lovable)">Lovable</strong> = your builder, your deployer, your UI designer<br><br>
+      <span style="color:var(--muted);font-size:14px;">Both tools have a chat box at the bottom. Paste your prompt in that box. Press Enter. That's it.</span>
+    </div>
+  </div>
+
+</div><!-- end workflow section -->
+
+</div><!-- end .content -->
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function cp(btn) {
+  const box = btn.closest('.prompt-display');
+  const clone = box.cloneNode(true);
+  clone.querySelectorAll('button').forEach(b => b.remove());
+  const text = clone.innerText.replace('YOUR PROMPT','').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+</script>
+
+</body>
+</html>

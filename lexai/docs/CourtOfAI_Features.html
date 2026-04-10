@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Court of AI — Feature Documentation</title>
+<style>
+  :root {
+    --navy: #1e3a5f;
+    --navy-light: #2a4f82;
+    --gold: #c9a227;
+    --gold-light: #f0d060;
+    --bg: #f8f9fc;
+    --text: #1a2433;
+    --muted: #6b7a90;
+    --row-alt: #e8f0fe;
+    --green: #16a34a;
+    --red: #dc2626;
+    --amber: #d97706;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  /* COVER */
+  .cover {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    color: white;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 60px 40px;
+  }
+  .cover-badge { background: var(--gold); color: var(--navy); font-weight: 700; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 6px 18px; border-radius: 20px; margin-bottom: 28px; display: inline-block; }
+  .cover h1 { font-size: 56px; font-weight: 800; letter-spacing: -2px; margin-bottom: 8px; }
+  .cover-gold { color: var(--gold); }
+  .cover h2 { font-size: 20px; font-weight: 400; opacity: 0.75; margin-bottom: 32px; }
+  .cover-divider { width: 80px; height: 3px; background: var(--gold); border-radius: 2px; margin: 0 auto 40px; }
+  .cover-badges { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+  .cover-stat { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; padding: 16px 24px; }
+  .cover-stat-num { font-size: 32px; font-weight: 800; color: var(--gold); }
+  .cover-stat-label { font-size: 12px; opacity: 0.7; margin-top: 2px; }
+  .cover-version { margin-top: 48px; font-size: 12px; opacity: 0.45; }
+
+  /* SECTIONS */
+  .section { max-width: 1000px; margin: 0 auto; padding: 64px 32px; }
+  .section-header { background: var(--navy); color: white; padding: 14px 28px; border-radius: 10px; margin-bottom: 32px; display: flex; align-items: center; gap: 14px; }
+  .section-num { background: var(--gold); color: var(--navy); font-weight: 800; font-size: 13px; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .section-header h2 { font-size: 20px; font-weight: 700; }
+
+  /* TOC */
+  .toc { background: white; border: 1px solid #dde3ef; border-radius: 12px; padding: 28px 32px; }
+  .toc h3 { font-size: 14px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 16px; }
+  .toc-list { list-style: none; }
+  .toc-list li { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid #eef0f5; }
+  .toc-list li:last-child { border-bottom: none; }
+  .toc-num { background: var(--navy); color: white; font-size: 11px; font-weight: 700; min-width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .toc-list a { color: var(--navy); text-decoration: none; font-size: 14px; font-weight: 500; }
+  .toc-list a:hover { color: var(--gold); }
+  .toc-page { margin-left: auto; font-size: 12px; color: var(--muted); }
+
+  /* TABLES */
+  .tbl-wrap { overflow-x: auto; margin-bottom: 20px; border-radius: 10px; border: 1px solid #dde3ef; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--navy); color: white; padding: 12px 14px; text-align: left; font-weight: 600; font-size: 12px; letter-spacing: 0.5px; }
+  th:first-child { border-radius: 0; }
+  td { padding: 10px 14px; border-bottom: 1px solid #eef0f5; vertical-align: top; }
+  tr:nth-child(even) td { background: var(--row-alt); }
+  tr:last-child td { border-bottom: none; }
+  .check { color: var(--green); font-weight: 700; }
+  .cross { color: var(--red); }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px; }
+  .badge-all { background: #dcfce7; color: #166534; }
+  .badge-starter { background: #dbeafe; color: #1e40af; }
+  .badge-pro { background: #ede9fe; color: #6d28d9; }
+  .badge-free { background: #f3f4f6; color: #374151; }
+
+  /* DETAIL CARDS */
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .detail-card { background: white; border: 1px solid #dde3ef; border-radius: 10px; padding: 18px 20px; }
+  .detail-card h4 { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+  .detail-card p, .detail-card li { font-size: 13px; color: var(--text); }
+  .detail-card ul { padding-left: 16px; }
+  .detail-card li { margin-bottom: 4px; }
+
+  .route-pill { display: inline-block; background: #1e1e2e; color: #a5f3fc; font-family: monospace; font-size: 13px; padding: 4px 12px; border-radius: 6px; margin-bottom: 16px; }
+  .law-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .law-tag { background: #e8f0fe; color: var(--navy); font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px; }
+
+  /* RISK BARS */
+  .risk-bars { display: flex; gap: 12px; margin-bottom: 20px; }
+  .risk-bar { flex: 1; border-radius: 10px; padding: 16px; text-align: center; }
+  .risk-bar.green { background: #dcfce7; border: 1px solid #86efac; }
+  .risk-bar.amber { background: #fef3c7; border: 1px solid #fcd34d; }
+  .risk-bar.red { background: #fee2e2; border: 1px solid #fca5a5; }
+  .risk-range { font-size: 20px; font-weight: 800; }
+  .risk-bar.green .risk-range { color: var(--green); }
+  .risk-bar.amber .risk-range { color: var(--amber); }
+  .risk-bar.red .risk-range { color: var(--red); }
+  .risk-label { font-size: 12px; font-weight: 600; margin-top: 4px; }
+
+  /* ARCH DIAGRAM */
+  .arch { background: white; border: 1px solid #dde3ef; border-radius: 12px; padding: 28px; margin-bottom: 20px; }
+  .arch-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 24px; }
+  .arch-layout { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .arch-user { background: var(--gold); color: var(--navy); padding: 10px 24px; border-radius: 8px; font-weight: 700; font-size: 14px; }
+  .arch-arrow-down { color: var(--gold); font-size: 20px; }
+  .arch-app { background: var(--navy); color: white; padding: 12px 32px; border-radius: 8px; font-weight: 700; font-size: 14px; }
+  .arch-services { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+  .arch-service { background: white; border: 2px solid var(--navy); border-radius: 8px; padding: 10px 16px; font-size: 12px; font-weight: 600; color: var(--navy); text-align: center; }
+  .arch-service span { display: block; font-size: 10px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+
+  .flow-diagram { display: flex; align-items: center; flex-wrap: wrap; gap: 0; justify-content: center; }
+  .flow-box { background: var(--navy); color: white; padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; text-align: center; }
+  .flow-box.gold { background: var(--gold); color: var(--navy); }
+  .flow-box.sm { padding: 8px 12px; font-size: 11px; }
+  .flow-arrow { color: var(--gold); font-size: 20px; padding: 0 6px; }
+  .flow-split { display: flex; flex-direction: column; gap: 6px; }
+
+  /* SCHEMA */
+  .schema-table { background: white; border: 1px solid #dde3ef; border-radius: 10px; padding: 20px 24px; margin-bottom: 14px; }
+  .schema-table h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .schema-table h4 .tbl-icon { background: var(--navy); color: white; font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: 600; }
+  .field-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .field { background: #f1f5f9; color: #334155; font-size: 11px; font-family: monospace; padding: 3px 8px; border-radius: 4px; }
+  .field.pk { background: #fef3c7; color: #92400e; }
+  .field.fk { background: #ede9fe; color: #5b21b6; }
+
+  /* LAW LIST */
+  .statute-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .statute-item { background: white; border: 1px solid #dde3ef; border-left: 3px solid var(--gold); border-radius: 8px; padding: 12px 16px; font-size: 13px; font-weight: 600; color: var(--navy); }
+  .statute-year { font-size: 11px; color: var(--muted); font-weight: 400; display: block; margin-top: 2px; }
+
+  footer { background: var(--navy); color: rgba(255,255,255,0.55); text-align: center; padding: 20px; font-size: 12px; margin-top: 64px; }
+
+  @media (max-width: 700px) {
+    .detail-grid, .statute-grid, .arch-services, .risk-bars { grid-template-columns: 1fr; flex-direction: column; }
+    .cover h1 { font-size: 36px; }
+    .cover-badges { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-badge">Feature Documentation · v1.0</div>
+  <h1>Court <span class="cover-gold">of</span> AI</h1>
+  <h2>Complete product reference for developers, investors, and partners</h2>
+  <div class="cover-divider"></div>
+  <div class="cover-badges">
+    <div class="cover-stat"><div class="cover-stat-num">16</div><div class="cover-stat-label">AI Features</div></div>
+    <div class="cover-stat"><div class="cover-stat-num">9</div><div class="cover-stat-label">Doc Types</div></div>
+    <div class="cover-stat"><div class="cover-stat-num">15</div><div class="cover-stat-label">Templates</div></div>
+    <div class="cover-stat"><div class="cover-stat-num">18</div><div class="cover-stat-label">API Endpoints</div></div>
+    <div class="cover-stat"><div class="cover-stat-num">17</div><div class="cover-stat-label">Laws Covered</div></div>
+  </div>
+  <div class="cover-version">Version 1.0 &nbsp;|&nbsp; 2025 &nbsp;|&nbsp; Court of AI &copy; 2025 &nbsp;|&nbsp; courtofai.pk</div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="section" id="toc">
+  <div class="section-header">
+    <div class="section-num">📋</div>
+    <h2>Table of Contents</h2>
+  </div>
+  <div class="toc">
+    <ul class="toc-list">
+      <li><div class="toc-num">1</div><a href="#feature-overview">Feature Overview</a><span class="toc-page">All 16 features</span></li>
+      <li><div class="toc-num">2</div><a href="#advisor">AI Legal Advisor</a><span class="toc-page">7-section brief · 12 categories</span></li>
+      <li><div class="toc-num">3</div><a href="#analysis">Contract Analysis</a><span class="toc-page">Risk score · Red flags · Deadlines</span></li>
+      <li><div class="toc-num">4</div><a href="#documents">Document Types</a><span class="toc-page">9 document types · Pakistani law basis</span></li>
+      <li><div class="toc-num">5</div><a href="#templates">Template Library</a><span class="toc-page">15 Pakistan-specific templates</span></li>
+      <li><div class="toc-num">6</div><a href="#plans">Plan Comparison</a><span class="toc-page">Free · Starter · Pro · Team</span></li>
+      <li><div class="toc-num">7</div><a href="#api">API Reference</a><span class="toc-page">18 endpoints</span></li>
+      <li><div class="toc-num">8</div><a href="#schema">Database Schema</a><span class="toc-page">5 tables · Architecture diagram</span></li>
+      <li><div class="toc-num">9</div><a href="#laws">Pakistani Law Coverage</a><span class="toc-page">17 statutes</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- SECTION 1: FEATURE OVERVIEW -->
+<div class="section" id="feature-overview">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <h2>Feature Overview</h2>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Feature</th><th>Route</th><th>Plan</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><strong>AI Legal Advisor</strong> 🆕</td><td><code>/advisor</code></td><td><span class="badge badge-all">All Plans</span></td><td>Structured legal brief with Pakistani law citations from plain-language description</td></tr>
+        <tr><td>2</td><td>Contract Analysis</td><td><code>/contracts</code></td><td><span class="badge badge-all">All Plans</span></td><td>Risk score 0–100, red flags, plain-English summary in 30 seconds</td></tr>
+        <tr><td>3</td><td>Contract Comparison</td><td><code>/compare</code></td><td><span class="badge badge-pro">Pro+</span></td><td>Compare two contracts, AI recommends best option</td></tr>
+        <tr><td>4</td><td>Clause Negotiation</td><td><code>/contracts</code></td><td><span class="badge badge-starter">Starter+</span></td><td>AI rewrites risky clauses in user's favor</td></tr>
+        <tr><td>5</td><td>AI Legal Chat</td><td><code>/chat</code></td><td><span class="badge badge-all">All Plans</span></td><td>Streaming Q&amp;A in Urdu + English (SSE)</td></tr>
+        <tr><td>6</td><td>Document Generation</td><td><code>/documents</code></td><td><span class="badge badge-all">All Plans</span></td><td>9 document types AI-generated under Pakistani law</td></tr>
+        <tr><td>7</td><td>Template Library</td><td><code>/templates</code></td><td><span class="badge badge-all">All Plans</span></td><td>15 Pakistan-specific legal templates</td></tr>
+        <tr><td>8</td><td>Deadline Tracker</td><td><code>/deadlines</code></td><td><span class="badge badge-starter">Starter+</span></td><td>Auto-extract deadlines from contracts, email reminders</td></tr>
+        <tr><td>9</td><td>Legal Calendar</td><td><code>/calendar</code></td><td><span class="badge badge-starter">Starter+</span></td><td>Monthly view of all contract deadlines</td></tr>
+        <tr><td>10</td><td>Case Law Search</td><td><code>/precedents</code></td><td><span class="badge badge-all">All Plans</span></td><td>Supreme Court, High Courts, Federal Shariat Court</td></tr>
+        <tr><td>11</td><td>Statutes Reference</td><td><code>/statutes</code></td><td><span class="badge badge-all">All Plans</span></td><td>16+ Pakistani laws with key sections</td></tr>
+        <tr><td>12</td><td>Clause Library</td><td><code>/clauses</code></td><td><span class="badge badge-starter">Starter+</span></td><td>Save and reuse approved clauses</td></tr>
+        <tr><td>13</td><td>Analytics Dashboard</td><td><code>/analytics</code></td><td><span class="badge badge-starter">Starter+</span></td><td>Risk trends, usage stats, ROI savings</td></tr>
+        <tr><td>14</td><td>PDF Report Export</td><td><code>/contracts</code></td><td><span class="badge badge-starter">Starter+</span></td><td>Download formatted contract analysis reports</td></tr>
+        <tr><td>15</td><td>Referral Program</td><td><code>/referral</code></td><td><span class="badge badge-all">All Plans</span></td><td>Earn free months for referring users</td></tr>
+        <tr><td>16</td><td>Bilingual Support</td><td>Global</td><td><span class="badge badge-all">All Plans</span></td><td>Full RTL Urdu + English throughout platform</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 2: AI LEGAL ADVISOR -->
+<div class="section" id="advisor">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <h2>AI Legal Advisor</h2>
+  </div>
+  <div class="route-pill">POST /api/advisor</div>
+  <div class="detail-grid">
+    <div class="detail-card">
+      <h4>Input Fields</h4>
+      <ul>
+        <li><strong>situationType</strong> — 12 categories (required)</li>
+        <li><strong>description</strong> — What happened (required)</li>
+        <li><strong>facts</strong> — Key evidence (optional)</li>
+        <li><strong>desiredOutcome</strong> — Goal (optional)</li>
+        <li><strong>language</strong> — <code>en</code> or <code>ur</code></li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <h4>12 Situation Types</h4>
+      <ul>
+        <li>Unpaid Invoice / Non-Payment</li>
+        <li>Contract Breach / Violation</li>
+        <li>Employment Dispute</li>
+        <li>Property / Rent Dispute</li>
+        <li>Business Partner Dispute</li>
+        <li>IP Theft / Copyright Violation</li>
+        <li>Consumer Complaint</li>
+        <li>Cyber Crime / Online Fraud</li>
+        <li>Family / Inheritance Matter</li>
+        <li>Tax / FBR Issue</li>
+        <li>Startup / Company Registration</li>
+        <li>Other Legal Matter</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="detail-card" style="margin-bottom:16px;">
+    <h4>Output — 7-Section Legal Brief</h4>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+      <div style="background:#f8f9fc; border-radius:8px; padding:12px;"><strong>1. Situation Summary</strong><br/><span style="font-size:12px; color:var(--muted);">2–3 sentence overview</span></div>
+      <div style="background:#f8f9fc; border-radius:8px; padding:12px;"><strong>2. Legal Analysis</strong><br/><span style="font-size:12px; color:var(--muted);">Applicable Pakistani law with section citations</span></div>
+      <div style="background:#f8f9fc; border-radius:8px; padding:12px;"><strong>3. Your Legal Rights</strong><br/><span style="font-size:12px; color:var(--muted);">Rights and legal position</span></div>
+      <div style="background:#f8f9fc; border-radius:8px; padding:12px;"><strong>4. Recommended Actions</strong><br/><span style="font-size:12px; color:var(--muted);">Numbered steps, most urgent first</span></div>
+      <div style="background:#f8f9fc; border-radius:8px; padding:12px;"><strong>5. What to Document</strong><br/><span style="font-size:12px; color:var(--muted);">Evidence collection checklist</span></div>
+      <div style="background:#f8f9fc; border-radius:8px; padding:12px;"><strong>6. Draft Communication</strong><br/><span style="font-size:12px; color:var(--muted);">Letter or notice template</span></div>
+    </div>
+    <div style="background:#f8f9fc; border-radius:8px; padding:12px; margin-top:10px;"><strong>7. When to See a Lawyer</strong><br/><span style="font-size:12px; color:var(--muted);">Clear guidance on when professional representation is essential</span></div>
+  </div>
+
+  <div class="detail-card" style="margin-bottom:16px;">
+    <h4>Technical Configuration</h4>
+    <p>Model: <code>claude-sonnet-4-20250514</code> &nbsp;·&nbsp; max_tokens: <code>2000</code> &nbsp;·&nbsp; temperature: <code>0.3</code></p>
+  </div>
+
+  <div class="detail-card">
+    <h4>Pakistani Laws Cited</h4>
+    <div class="law-list" style="margin-top:10px;">
+      <span class="law-tag">Contract Act 1872</span>
+      <span class="law-tag">PPC 1860</span>
+      <span class="law-tag">CrPC 1898</span>
+      <span class="law-tag">Companies Act 2017</span>
+      <span class="law-tag">SECP Regulations</span>
+      <span class="law-tag">FBR / Tax</span>
+      <span class="law-tag">Copyright Ordinance 1962</span>
+      <span class="law-tag">Trademark Ordinance 2001</span>
+      <span class="law-tag">PDPA</span>
+      <span class="law-tag">PECA 2016</span>
+      <span class="law-tag">EOBI Act</span>
+      <span class="law-tag">Industrial Relations Act</span>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3: CONTRACT ANALYSIS -->
+<div class="section" id="analysis">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <h2>Contract Analysis</h2>
+  </div>
+  <div class="route-pill">POST /api/contracts</div>
+
+  <div class="risk-bars">
+    <div class="risk-bar green">
+      <div class="risk-range">0–39</div>
+      <div class="risk-label">Low Risk</div>
+    </div>
+    <div class="risk-bar amber">
+      <div class="risk-range">40–69</div>
+      <div class="risk-label">Medium Risk</div>
+    </div>
+    <div class="risk-bar red">
+      <div class="risk-range">70–100</div>
+      <div class="risk-label">High Risk</div>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+    <div class="detail-card">
+      <h4>Response Fields</h4>
+      <ul>
+        <li><code>riskScore</code> — 0 to 100</li>
+        <li><code>riskSummary</code> — Plain text</li>
+        <li><code>keyClauses[]</code> — Array of objects</li>
+        <li><code>redFlags[]</code> — High-risk items</li>
+        <li><code>missingProtections[]</code> — Gaps</li>
+        <li><code>recommendations[]</code> — Action items</li>
+        <li><code>plainEnglishSummary</code> — Full text</li>
+      </ul>
+    </div>
+    <div class="detail-card">
+      <h4>Additional Features</h4>
+      <ul>
+        <li>Auto-extracts deadlines → saves to <code>deadlines</code> table</li>
+        <li>Sends email notification via Resend on completion</li>
+        <li>PDF report download (Starter+)</li>
+        <li>Clause negotiation (Starter+)</li>
+      </ul>
+      <h4 style="margin-top:16px;">Monthly Limits</h4>
+      <ul>
+        <li>Free: 3 analyses / mo</li>
+        <li>Starter: 25 analyses / mo</li>
+        <li>Pro: 100 analyses / mo</li>
+        <li>Team: Unlimited</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="arch" style="margin-top:20px;">
+    <div class="arch-title">Contract Analysis Flow</div>
+    <div class="flow-diagram">
+      <div class="flow-box">Contract Text Input</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">Claude API</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">Structured JSON</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-split">
+        <div class="flow-box sm gold">Risk Score 0–100</div>
+        <div class="flow-box sm">Key Clauses</div>
+        <div class="flow-box sm">Red Flags</div>
+        <div class="flow-box sm">Recommendations</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 4: DOCUMENT TYPES -->
+<div class="section" id="documents">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <h2>Document Types</h2>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Document Type</th><th>DB Value</th><th>Pakistani Law Basis</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Non-Disclosure Agreement</strong></td><td><code>nda</code></td><td>Contract Act 1872</td></tr>
+        <tr><td><strong>Service Agreement</strong></td><td><code>service_agreement</code></td><td>Contract Act 1872, Sale of Goods Act 1930</td></tr>
+        <tr><td><strong>Employment Contract</strong></td><td><code>employment_contract</code></td><td>Industrial Relations Act, EOBI, SESSI</td></tr>
+        <tr><td><strong>Privacy Policy</strong></td><td><code>privacy_policy</code></td><td>PDPA, GDPR principles</td></tr>
+        <tr><td><strong>Terms of Service</strong></td><td><code>terms_of_service</code></td><td>ETO 2002, PECA 2016</td></tr>
+        <tr><td><strong>Invoice</strong></td><td><code>invoice</code></td><td>FBR regulations, Income Tax Ordinance 2001</td></tr>
+        <tr><td><strong>Cease &amp; Desist</strong></td><td><code>cease_and_desist</code></td><td>Copyright Ordinance 1962, Trademark Ordinance 2001</td></tr>
+        <tr><td><strong>Demand Letter</strong></td><td><code>demand_letter</code></td><td>Contract Act 1872, Negotiable Instruments Act</td></tr>
+        <tr><td><strong>Other</strong></td><td><code>other</code></td><td>Custom / as applicable</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 5: TEMPLATE LIBRARY -->
+<div class="section" id="templates">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <h2>Template Library</h2>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Template Name</th><th>Category</th><th>Complexity</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Freelance Service Agreement</td><td>Freelance &amp; IT</td><td>Standard</td></tr>
+        <tr><td>2</td><td>Non-Disclosure Agreement (NDA)</td><td>Business</td><td>Simple</td></tr>
+        <tr><td>3</td><td>Employment Contract (Pakistan)</td><td>Employment</td><td>Complex</td></tr>
+        <tr><td>4</td><td>SaaS Terms of Service</td><td>Freelance &amp; IT</td><td>Complex</td></tr>
+        <tr><td>5</td><td>Privacy Policy (PDPA-compliant)</td><td>IP &amp; Privacy</td><td>Standard</td></tr>
+        <tr><td>6</td><td>Vendor / Supplier Agreement</td><td>Business</td><td>Standard</td></tr>
+        <tr><td>7</td><td>Commercial Property Rental</td><td>Property</td><td>Standard</td></tr>
+        <tr><td>8</td><td>Partnership Deed</td><td>Business</td><td>Complex</td></tr>
+        <tr><td>9</td><td>IP Assignment Agreement</td><td>IP &amp; Privacy</td><td>Standard</td></tr>
+        <tr><td>10</td><td>Demand Letter</td><td>Business</td><td>Simple</td></tr>
+        <tr><td>11</td><td>Cease &amp; Desist Letter</td><td>IP &amp; Privacy</td><td>Simple</td></tr>
+        <tr><td>12</td><td>Consulting Retainer Agreement</td><td>Freelance &amp; IT</td><td>Standard</td></tr>
+        <tr><td>13</td><td>Data Processing Agreement</td><td>IP &amp; Privacy</td><td>Complex</td></tr>
+        <tr><td>14</td><td>Shareholder Agreement</td><td>Business</td><td>Complex</td></tr>
+        <tr><td>15</td><td>FBR-Compliant Invoice</td><td>Freelance &amp; IT</td><td>Simple</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 6: PLAN COMPARISON -->
+<div class="section" id="plans">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <h2>Plan Comparison</h2>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Feature</th><th>Free</th><th>Starter $49/mo</th><th>Pro $99/mo</th><th>Team $299/mo</th></tr></thead>
+      <tbody>
+        <tr><td>Contract analyses</td><td>3/mo</td><td>25/mo</td><td>100/mo</td><td>Unlimited</td></tr>
+        <tr><td>AI chat messages</td><td>5/mo</td><td>50/mo</td><td>200/mo</td><td>Unlimited</td></tr>
+        <tr><td>Documents generated</td><td>1/mo</td><td>10/mo</td><td>50/mo</td><td>Unlimited</td></tr>
+        <tr><td>Team members</td><td>1</td><td>1</td><td>3</td><td>10</td></tr>
+        <tr><td>AI Legal Advisor</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Clause negotiation</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Deadline reminders</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>PDF reports</td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Contract comparison</td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Custom templates</td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+        <tr><td>Priority support</td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 7: API REFERENCE -->
+<div class="section" id="api">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <h2>API Reference</h2>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Method</th><th>Endpoint</th><th>Auth</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><span style="color:#16a34a; font-weight:700;">POST</span></td><td><code>/api/advisor</code></td><td><span class="check">✓</span></td><td>Generate AI legal brief</td></tr>
+        <tr><td>2</td><td><span style="color:#16a34a; font-weight:700;">POST</span></td><td><code>/api/contracts</code></td><td><span class="check">✓</span></td><td>Analyze contract</td></tr>
+        <tr><td>3</td><td><span style="color:#2563eb; font-weight:700;">GET</span></td><td><code>/api/contracts</code></td><td><span class="check">✓</span></td><td>List user contracts</td></tr>
+        <tr><td>4</td><td><span style="color:#dc2626; font-weight:700;">DELETE</span></td><td><code>/api/contracts/[id]</code></td><td><span class="check">✓</span></td><td>Delete contract</td></tr>
+        <tr><td>5</td><td><span style="color:#16a34a; font-weight:700;">POST</span></td><td><code>/api/chat</code></td><td><span class="check">✓</span></td><td>Streaming AI chat (SSE)</td></tr>
+        <tr><td>6</td><td><span style="color:#2563eb; font-weight:700;">GET</span></td><td><code>/api/chat/conversation/[id]</code></td><td><span class="check">✓</span></td><td>Load conversation history</td></tr>
+        <tr><td>7</td><td><span style="color:#16a34a; font-weight:700;">POST</span></td><td><code>/api/documents</code></td><td><span class="check">✓</span></td><td>Generate legal document</td></tr>
+        <tr><td>8</td><td><span style="color:#2563eb; font-weight:700;">GET</span></td><td><code>/api/documents</code></td><td><span class="check">✓</span></td><td>List generated documents</td></tr>
+        <tr><td>9</td><td><span style="color:#16a34a; font-weight:700;">POST</span></td><td><code>/api/compare</code></td><td><span class="check">✓</span></td><td>Compare two contracts</td></tr>
+        <tr><td>10</td><td><span style="color:#2563eb; font-weight:700;">GET</span></td><td><code>/api/templates</code></td><td><span class="cross">Public</span></td><td>List templates</td></tr>
+        <tr><td>11</td><td><span style="color:#16a34a; font-weight:700;">POST</span></td><td><code>/api/templates/generate</code></td><td><span class="check">✓</span></td><td>Generate from template</td></tr>
+        <tr><td>12</td><td><span style="color:#2563eb; font-weight:700;">GET</span></td><td><code>/api/clauses</code></td><td><span class="check">✓</span></td><td>List saved clauses</td></tr>
+        <tr><td>13</td><td><span style="color:#16a34a; font-weight:700;">POST</span></td><td><code>/api/clauses</code></td><td><span class="check">✓</span></td><td>Save clause to library</td></tr>
+        <tr><td>14</td><td><span style="color:#2563eb; font-weight:700;">GET</span></td><td><code>/api/deadlines</code></td><td><span class="check">✓</span></td><td>List contract deadlines</td></tr>
+        <tr><td>15</td><td><span style="color:#16a34a; font-weight:700;">POST</span></td><td><code>/api/stripe/checkout</code></td><td><span class="check">✓</span></td><td>Create Stripe checkout session</td></tr>
+        <tr><td>16</td><td><span style="color:#16a34a; font-weight:700;">POST</span></td><td><code>/api/stripe/portal</code></td><td><span class="check">✓</span></td><td>Open Stripe billing portal</td></tr>
+        <tr><td>17</td><td><span style="color:#16a34a; font-weight:700;">POST</span></td><td><code>/api/stripe/webhook</code></td><td><span class="cross">Public</span></td><td>Handle Stripe webhook events</td></tr>
+        <tr><td>18</td><td><span style="color:#2563eb; font-weight:700;">GET</span></td><td><code>/api/analytics</code></td><td><span class="check">✓</span></td><td>Get usage analytics</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 8: DATABASE SCHEMA -->
+<div class="section" id="schema">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <h2>Database Schema</h2>
+  </div>
+
+  <div class="schema-table">
+    <h4><span class="tbl-icon">TABLE</span> users</h4>
+    <div class="field-list">
+      <span class="field pk">id (PK)</span>
+      <span class="field">email</span>
+      <span class="field">full_name</span>
+      <span class="field">plan</span>
+      <span class="field">stripe_customer_id</span>
+      <span class="field">stripe_subscription_id</span>
+      <span class="field">contracts_used</span>
+      <span class="field">chats_used</span>
+      <span class="field">documents_used</span>
+      <span class="field">created_at</span>
+    </div>
+  </div>
+
+  <div class="schema-table">
+    <h4><span class="tbl-icon">TABLE</span> contracts</h4>
+    <div class="field-list">
+      <span class="field pk">id (PK)</span>
+      <span class="field fk">user_id (FK)</span>
+      <span class="field">title</span>
+      <span class="field">content</span>
+      <span class="field">risk_score</span>
+      <span class="field">risk_summary</span>
+      <span class="field">key_clauses (JSONB)</span>
+      <span class="field">red_flags (JSONB)</span>
+      <span class="field">missing_protections (JSONB)</span>
+      <span class="field">recommendations (JSONB)</span>
+      <span class="field">plain_english_summary</span>
+      <span class="field">created_at</span>
+    </div>
+  </div>
+
+  <div class="schema-table">
+    <h4><span class="tbl-icon">TABLE</span> conversations</h4>
+    <div class="field-list">
+      <span class="field pk">id (PK)</span>
+      <span class="field fk">user_id (FK)</span>
+      <span class="field">title</span>
+      <span class="field">messages_json (JSONB)</span>
+      <span class="field">created_at</span>
+      <span class="field">updated_at</span>
+    </div>
+  </div>
+
+  <div class="schema-table">
+    <h4><span class="tbl-icon">TABLE</span> documents_generated</h4>
+    <div class="field-list">
+      <span class="field pk">id (PK)</span>
+      <span class="field fk">user_id (FK)</span>
+      <span class="field">type (enum)</span>
+      <span class="field">title</span>
+      <span class="field">content</span>
+      <span class="field">created_at</span>
+    </div>
+  </div>
+
+  <div class="schema-table">
+    <h4><span class="tbl-icon">TABLE</span> deadlines</h4>
+    <div class="field-list">
+      <span class="field pk">id (PK)</span>
+      <span class="field fk">user_id (FK)</span>
+      <span class="field fk">contract_id (FK)</span>
+      <span class="field">title</span>
+      <span class="field">due_date</span>
+      <span class="field">reminder_sent (bool)</span>
+      <span class="field">created_at</span>
+    </div>
+  </div>
+
+  <div class="arch" style="margin-top:24px;">
+    <div class="arch-title">System Architecture</div>
+    <div class="arch-layout">
+      <div class="arch-user">User Browser</div>
+      <div class="arch-arrow-down">↓</div>
+      <div class="arch-app">Next.js 14 — App Router</div>
+      <div class="arch-arrow-down">↓</div>
+      <div class="arch-services">
+        <div class="arch-service">🗄️ Supabase<span>PostgreSQL + Auth + RLS</span></div>
+        <div class="arch-service">🤖 Anthropic Claude<span>claude-sonnet-4-20250514</span></div>
+        <div class="arch-service">💳 Stripe<span>Subscriptions + Webhooks</span></div>
+        <div class="arch-service">📧 Resend<span>Transactional Email</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 9: PAKISTANI LAW COVERAGE -->
+<div class="section" id="laws">
+  <div class="section-header">
+    <div class="section-num">9</div>
+    <h2>Pakistani Law Coverage</h2>
+  </div>
+  <div class="statute-grid">
+    <div class="statute-item">Pakistan Contract Act<span class="statute-year">1872</span></div>
+    <div class="statute-item">Sale of Goods Act<span class="statute-year">1930</span></div>
+    <div class="statute-item">Pakistan Penal Code (PPC)<span class="statute-year">1860</span></div>
+    <div class="statute-item">Code of Civil Procedure (CPC)<span class="statute-year">1908</span></div>
+    <div class="statute-item">Arbitration Act<span class="statute-year">1940</span></div>
+    <div class="statute-item">Companies Act<span class="statute-year">2017</span></div>
+    <div class="statute-item">SECP Regulations<span class="statute-year">Current</span></div>
+    <div class="statute-item">Income Tax Ordinance / FBR<span class="statute-year">2001</span></div>
+    <div class="statute-item">Industrial Relations Act<span class="statute-year">Current</span></div>
+    <div class="statute-item">EOBI Act<span class="statute-year">Current</span></div>
+    <div class="statute-item">SESSI Act<span class="statute-year">Current</span></div>
+    <div class="statute-item">Provincial Labor Laws<span class="statute-year">Punjab · Sindh · KPK · Balochistan</span></div>
+    <div class="statute-item">Copyright Ordinance<span class="statute-year">1962</span></div>
+    <div class="statute-item">Trademark Ordinance<span class="statute-year">2001</span></div>
+    <div class="statute-item">Pakistan Personal Data Protection Act (PDPA)<span class="statute-year">Current</span></div>
+    <div class="statute-item">Electronic Transactions Ordinance (ETO)<span class="statute-year">2002</span></div>
+    <div class="statute-item">Prevention of Electronic Crimes Act (PECA)<span class="statute-year">2016</span></div>
+  </div>
+</div>
+
+<footer>
+  Court of AI &copy; 2025 &nbsp;|&nbsp; courtofai.pk &nbsp;|&nbsp; Not a licensed law firm &nbsp;|&nbsp; Feature Documentation v1.0
+</footer>
+</body>
+</html>

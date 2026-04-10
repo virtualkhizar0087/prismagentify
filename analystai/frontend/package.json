@@ -1,0 +1,36 @@
+{
+  "name": "analystai-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.100.1",
+    "axios": "^1.6.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
+    "react-markdown": "^9.0.1",
+    "react-router-dom": "^6.21.1",
+    "react-scripts": "5.0.1",
+    "recharts": "^2.10.3"
+  },
+  "scripts": {
+    "start": "cross-env HOST=0.0.0.0 react-scripts start",
+    "build": "react-scripts build"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version"
+    ]
+  },
+  "proxy": "http://localhost:5050",
+  "homepage": ".",
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
+}

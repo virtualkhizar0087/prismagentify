@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Court of AI — Investor Pitch</title>
+<style>
+  :root {
+    --navy: #1e3a5f;
+    --navy-light: #2a4f82;
+    --gold: #c9a227;
+    --gold-light: #f0d060;
+    --bg: #f8f9fc;
+    --text: #1a2433;
+    --muted: #6b7a90;
+    --row-alt: #e8f0fe;
+    --green: #16a34a;
+    --red: #dc2626;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  /* ── COVER ── */
+  .cover {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+  }
+  .cover-badge {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 20px;
+    margin-bottom: 28px;
+    display: inline-block;
+  }
+  .cover h1 { font-size: 72px; font-weight: 800; letter-spacing: -2px; margin-bottom: 16px; }
+  .cover-gold { color: var(--gold); }
+  .cover h2 { font-size: 26px; font-weight: 400; opacity: 0.85; margin-bottom: 12px; }
+  .cover-tagline { font-size: 18px; color: var(--gold-light); font-style: italic; margin-bottom: 48px; }
+  .cover-divider { width: 80px; height: 3px; background: var(--gold); border-radius: 2px; margin: 0 auto 48px; }
+  .cover-stats { display: flex; gap: 48px; }
+  .cover-stat-num { font-size: 36px; font-weight: 800; color: var(--gold); }
+  .cover-stat-label { font-size: 13px; opacity: 0.75; margin-top: 4px; }
+  .cover-year { margin-top: 60px; font-size: 13px; opacity: 0.5; }
+
+  /* ── SECTIONS ── */
+  .section { max-width: 960px; margin: 0 auto; padding: 64px 32px; }
+  .section-header {
+    background: var(--navy);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 10px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .section-num {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 800;
+    font-size: 13px;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-header h2 { font-size: 20px; font-weight: 700; }
+
+  /* ── PROBLEM ── */
+  .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .problem-card {
+    background: white;
+    border: 1px solid #dde3ef;
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+  .problem-card .stat { font-size: 28px; font-weight: 800; color: var(--navy); }
+  .problem-card .label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .problem-highlight {
+    margin-top: 20px;
+    background: #fff8e6;
+    border: 1px solid #f0d060;
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 15px;
+    color: #7a5a00;
+    font-weight: 500;
+  }
+
+  /* ── SOLUTION ── */
+  .solution-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .solution-list li {
+    background: white;
+    border: 1px solid #dde3ef;
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .solution-icon { color: var(--gold); font-size: 20px; flex-shrink: 0; }
+  .solution-list li strong { display: block; font-size: 15px; color: var(--navy); }
+  .solution-list li span { font-size: 13px; color: var(--muted); }
+
+  /* ── FLOW DIAGRAM ── */
+  .diagram { background: white; border: 1px solid #dde3ef; border-radius: 12px; padding: 32px; margin-bottom: 24px; }
+  .diagram-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 24px; }
+  .flow { display: flex; align-items: center; gap: 0; flex-wrap: wrap; justify-content: center; }
+  .flow-box {
+    background: var(--navy);
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    min-width: 100px;
+  }
+  .flow-box.gold { background: var(--gold); color: var(--navy); }
+  .flow-arrow { color: var(--gold); font-size: 22px; padding: 0 8px; font-weight: 700; }
+
+  /* STEPS */
+  .steps { display: flex; gap: 20px; }
+  .step {
+    flex: 1;
+    background: white;
+    border: 1px solid #dde3ef;
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+  }
+  .step-num {
+    width: 44px; height: 44px;
+    background: var(--navy);
+    color: white;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+  }
+  .step h3 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .step p { font-size: 12px; color: var(--muted); }
+
+  /* FUNNEL */
+  .funnel { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .funnel-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 56px;
+    border-radius: 6px;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+    transition: width .3s;
+  }
+  .funnel-row:nth-child(1) { width: 100%; background: var(--navy); }
+  .funnel-row:nth-child(2) { width: 70%; background: var(--navy-light); }
+  .funnel-row:nth-child(3) { width: 45%; background: var(--gold); color: var(--navy); }
+
+  /* ── TABLES ── */
+  .tbl-wrap { overflow-x: auto; margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { background: var(--navy); color: white; padding: 12px 16px; text-align: left; font-weight: 600; font-size: 12px; letter-spacing: 0.5px; }
+  td { padding: 11px 16px; border-bottom: 1px solid #eef0f5; }
+  tr:nth-child(even) td { background: var(--row-alt); }
+  tr:last-child td { border-bottom: none; }
+  .check { color: var(--green); font-weight: 700; }
+  .cross { color: var(--red); }
+
+  /* ── FEATURES GRID ── */
+  .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .feature-card {
+    background: white;
+    border: 1px solid #dde3ef;
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .feature-num {
+    background: var(--navy);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .feature-card.new { border-left: 3px solid var(--gold); }
+  .feature-card .new-badge {
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 9px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 10px;
+    letter-spacing: 1px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .feature-name { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .feature-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  /* PRICING */
+  .pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .plan-card {
+    background: white;
+    border: 1px solid #dde3ef;
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+  }
+  .plan-card.featured { border: 2px solid var(--navy); background: var(--navy); color: white; }
+  .plan-name { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 8px; }
+  .plan-card.featured .plan-name { color: var(--gold-light); }
+  .plan-price { font-size: 32px; font-weight: 800; color: var(--navy); }
+  .plan-card.featured .plan-price { color: white; }
+  .plan-period { font-size: 12px; color: var(--muted); }
+  .plan-card.featured .plan-period { color: rgba(255,255,255,0.6); }
+  .plan-pkr { font-size: 12px; color: var(--gold); font-weight: 600; margin-top: 4px; }
+  .plan-divider { border: none; border-top: 1px solid #eef0f5; margin: 16px 0; }
+  .plan-card.featured .plan-divider { border-color: rgba(255,255,255,0.2); }
+  .plan-feature { font-size: 12px; color: var(--muted); padding: 3px 0; }
+  .plan-card.featured .plan-feature { color: rgba(255,255,255,0.8); }
+
+  .unit-box {
+    background: #e8f0fe;
+    border: 1px solid #c2d4f8;
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .unit-item strong { display: block; font-size: 15px; color: var(--navy); }
+  .unit-item span { font-size: 12px; color: var(--muted); }
+
+  /* TECH STACK */
+  .tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tech-card {
+    background: white;
+    border: 1px solid #dde3ef;
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .tech-icon { font-size: 24px; }
+  .tech-label { font-size: 12px; color: var(--muted); }
+  .tech-name { font-size: 14px; font-weight: 700; color: var(--navy); }
+
+  /* THE ASK */
+  .ask-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 32px; }
+  .ask-card {
+    background: white;
+    border: 1px solid #dde3ef;
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .ask-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+  .ask-card span { font-size: 14px; color: var(--navy); font-weight: 500; }
+
+  .closing-banner {
+    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    color: white;
+    border-radius: 14px;
+    padding: 36px;
+    text-align: center;
+  }
+  .closing-banner h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .closing-banner p { font-size: 15px; opacity: 0.8; }
+  .closing-banner .gold { color: var(--gold); }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.55);
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    margin-top: 64px;
+  }
+
+  @media (max-width: 700px) {
+    .problem-grid, .solution-list, .features-grid, .pricing-grid, .tech-grid, .ask-grid, .steps { grid-template-columns: 1fr; flex-direction: column; }
+    .cover h1 { font-size: 48px; }
+    .cover-stats { flex-direction: column; gap: 24px; }
+  }
+  @media print {
+    .cover { min-height: 100vh; }
+    .section { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-badge">Investor Pitch · 2025</div>
+  <h1>Court <span class="cover-gold">of</span> AI</h1>
+  <h2>Pakistan's First AI Legal Co-Pilot</h2>
+  <p class="cover-tagline">"One platform. Every legal need. Urdu + English."</p>
+  <div class="cover-divider"></div>
+  <div class="cover-stats">
+    <div>
+      <div class="cover-stat-num">16</div>
+      <div class="cover-stat-label">AI-Powered Features</div>
+    </div>
+    <div>
+      <div class="cover-stat-num">220M</div>
+      <div class="cover-stat-label">Person Market</div>
+    </div>
+    <div>
+      <div class="cover-stat-num">$0</div>
+      <div class="cover-stat-label">Existing Competitors</div>
+    </div>
+  </div>
+  <div class="cover-year">Court of AI &copy; 2025 &nbsp;|&nbsp; courtofai.pk &nbsp;|&nbsp; Not a licensed law firm</div>
+</div>
+
+<!-- SECTION 1: THE PROBLEM -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <h2>The Problem</h2>
+  </div>
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="stat">5.2M+</div>
+      <div class="label">Pakistani SMEs with no access to affordable legal help</div>
+    </div>
+    <div class="problem-card">
+      <div class="stat">PKR 50,000</div>
+      <div class="label">Per hour — top lawyers in Lahore / Karachi</div>
+    </div>
+    <div class="problem-card">
+      <div class="stat">PKR 15,000–30,000</div>
+      <div class="label">Basic contract review cost</div>
+    </div>
+    <div class="problem-card">
+      <div class="stat">PKR 10,000–25,000</div>
+      <div class="label">NDA drafting cost</div>
+    </div>
+  </div>
+  <div class="problem-highlight">
+    ⚠️ Most freelancers and small businesses go without legal protection — and get burned. This is a structural gap in a <strong>220 million person market</strong>.
+  </div>
+</div>
+
+<!-- SECTION 2: THE SOLUTION -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <h2>The Solution</h2>
+  </div>
+  <ul class="solution-list">
+    <li>
+      <span class="solution-icon">⚡</span>
+      <div><strong>Contract Analysis in 30 Seconds</strong><span>Not 5 days</span></div>
+    </li>
+    <li>
+      <span class="solution-icon">📄</span>
+      <div><strong>Legal Documents in Minutes</strong><span>Not days</span></div>
+    </li>
+    <li>
+      <span class="solution-icon">⚖️</span>
+      <div><strong>Structured Legal Guidance</strong><span>Citing specific Pakistani law</span></div>
+    </li>
+    <li>
+      <span class="solution-icon">💰</span>
+      <div><strong>1% of Traditional Legal Fees</strong><span>From $0/month</span></div>
+    </li>
+  </ul>
+
+  <div style="margin-top:32px;">
+    <div class="diagram">
+      <div class="diagram-title">User Journey</div>
+      <div class="flow">
+        <div class="flow-box">User</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">Upload Contract</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">AI Analysis</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box gold">Risk Score + Red Flags</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box">Take Action</div>
+      </div>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Create or Upload</h3>
+        <p>Upload a contract or describe your legal situation in plain language</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>AI Analyzes</h3>
+        <p>Claude AI reviews under Pakistani law, identifies risks and rights</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Get Results + Act</h3>
+        <p>Receive risk score, red flags, recommended actions, and draft letters</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 3: TARGET AUDIENCE -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <h2>Target Audience</h2>
+  </div>
+  <div class="diagram" style="margin-bottom:28px;">
+    <div class="diagram-title">Market Size Funnel</div>
+    <div class="funnel">
+      <div class="funnel-row">🇵🇰 220M Population — Pakistan</div>
+      <div class="funnel-row">5.2M SMEs + 3M Freelancers</div>
+      <div class="funnel-row">Legal Tech Adopters</div>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Segment</th><th>Use Case</th><th>Market Size</th></tr></thead>
+      <tbody>
+        <tr><td>Freelancers (Upwork / Fiverr)</td><td>Client contracts, NDAs, payment protection</td><td>3M+ in Pakistan</td></tr>
+        <tr><td>Small Business Owners</td><td>Supplier contracts, risky clause detection</td><td>5.2M+ SMEs</td></tr>
+        <tr><td>Lawyers</td><td>Fast contract review, auto document drafting</td><td>120,000+ advocates</td></tr>
+        <tr><td>Startup Founders</td><td>Co-founder agreements, SECP docs, investor contracts</td><td>50,000+ startups</td></tr>
+        <tr><td>E-commerce Sellers</td><td>Privacy policies, terms &amp; conditions</td><td>2M+ sellers</td></tr>
+        <tr><td>Real Estate Professionals</td><td>Lease review, purchase agreements</td><td>Large market</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SECTION 4: FEATURES -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <h2>Product Features</h2>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card new">
+      <div class="feature-num">1</div>
+      <div>
+        <div class="feature-name">AI Legal Advisor <span class="new-badge">NEW</span></div>
+        <div class="feature-desc">Describe situation → structured legal brief with Pakistani law citations, rights, draft letter</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">2</div>
+      <div>
+        <div class="feature-name">Contract Analysis</div>
+        <div class="feature-desc">Risk score 0–100, red flags, plain-English summary in 30 seconds</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">3</div>
+      <div>
+        <div class="feature-name">Contract Comparison</div>
+        <div class="feature-desc">Upload two contracts, AI scores both and recommends best</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">4</div>
+      <div>
+        <div class="feature-name">Clause Negotiation</div>
+        <div class="feature-desc">AI rewrites risky clauses in your favor</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">5</div>
+      <div>
+        <div class="feature-name">AI Legal Chat</div>
+        <div class="feature-desc">Streaming Q&amp;A in Urdu + English</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">6</div>
+      <div>
+        <div class="feature-name">Document Generation</div>
+        <div class="feature-desc">9 document types: NDA, Employment, Privacy Policy, and more</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">7</div>
+      <div>
+        <div class="feature-name">Template Library</div>
+        <div class="feature-desc">15 Pakistan-specific legal templates</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">8</div>
+      <div>
+        <div class="feature-name">Deadline Tracker</div>
+        <div class="feature-desc">Auto-extract deadlines from contracts, email reminders</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">9</div>
+      <div>
+        <div class="feature-name">Legal Calendar</div>
+        <div class="feature-desc">Monthly view of all contract deadlines</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">10</div>
+      <div>
+        <div class="feature-name">Case Law Search</div>
+        <div class="feature-desc">Supreme Court, High Courts, Federal Shariat Court</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">11</div>
+      <div>
+        <div class="feature-name">Statutes Reference</div>
+        <div class="feature-desc">16+ Pakistani laws with key sections</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">12</div>
+      <div>
+        <div class="feature-name">Clause Library</div>
+        <div class="feature-desc">Save and reuse approved clauses</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">13</div>
+      <div>
+        <div class="feature-name">Analytics Dashboard</div>
+        <div class="feature-desc">Risk trends, usage stats, ROI savings</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">14</div>
+      <div>
+        <div class="feature-name">PDF Report Export</div>
+        <div class="feature-desc">Download formatted contract analysis reports</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">15</div>
+      <div>
+        <div class="feature-name">Referral Program</div>
+        <div class="feature-desc">Earn free months for referring users</div>
+      </div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-num">16</div>
+      <div>
+        <div class="feature-name">Bilingual (Urdu / English)</div>
+        <div class="feature-desc">Full RTL Urdu support throughout the platform</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 5: BUSINESS MODEL -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <h2>Business Model</h2>
+  </div>
+  <div class="pricing-grid">
+    <div class="plan-card">
+      <div class="plan-name">Free</div>
+      <div class="plan-price">$0</div>
+      <div class="plan-period">forever</div>
+      <div class="plan-pkr">PKR 0</div>
+      <hr class="plan-divider"/>
+      <div class="plan-feature">3 contracts / mo</div>
+      <div class="plan-feature">5 chats / mo</div>
+      <div class="plan-feature">1 document / mo</div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price">$49</div>
+      <div class="plan-period">per month</div>
+      <div class="plan-pkr">PKR 13,750 / mo</div>
+      <hr class="plan-divider"/>
+      <div class="plan-feature">25 contracts / mo</div>
+      <div class="plan-feature">50 chats / mo</div>
+      <div class="plan-feature">10 documents / mo</div>
+      <div class="plan-feature">Clause negotiation</div>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">$99</div>
+      <div class="plan-period">per month</div>
+      <div class="plan-pkr">PKR 27,750 / mo</div>
+      <hr class="plan-divider"/>
+      <div class="plan-feature">100 contracts / mo</div>
+      <div class="plan-feature">200 chats / mo</div>
+      <div class="plan-feature">50 documents / mo</div>
+      <div class="plan-feature">Contract comparison</div>
+      <div class="plan-feature">3 team members</div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Team</div>
+      <div class="plan-price">$299</div>
+      <div class="plan-period">per month</div>
+      <div class="plan-pkr">Unlimited</div>
+      <hr class="plan-divider"/>
+      <div class="plan-feature">Unlimited everything</div>
+      <div class="plan-feature">10 team members</div>
+      <div class="plan-feature">Custom templates</div>
+      <div class="plan-feature">Priority support</div>
+    </div>
+  </div>
+  <div class="unit-box">
+    <div class="unit-item"><strong>85%+</strong><span>Target gross margin</span></div>
+    <div class="unit-item"><strong>PKR 80k–200k</strong><span>Avg legal savings per user / year</span></div>
+    <div class="unit-item"><strong>Marginal</strong><span>AI API cost per request</span></div>
+  </div>
+</div>
+
+<!-- SECTION 6: COMPETITIVE LANDSCAPE -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <h2>Competitive Landscape</h2>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Feature</th><th>Court of AI</th><th>Pakistani Lawyer</th><th>LegalZoom</th><th>ChatGPT</th></tr></thead>
+      <tbody>
+        <tr><td>Cost</td><td><strong>$0–$99/mo</strong></td><td>PKR 5k–50k/hr</td><td>$39–$299/mo</td><td>No legal expertise</td></tr>
+        <tr><td>Speed</td><td><strong>30 seconds</strong></td><td>2–5 days</td><td>1–3 days</td><td>Fast but generic</td></tr>
+        <tr><td>Pakistan law</td><td><span class="check">✓ Built-in</span></td><td><span class="check">✓ Yes</span></td><td><span class="cross">✗ US-focused</span></td><td><span class="cross">✗ None</span></td></tr>
+        <tr><td>Urdu support</td><td><span class="check">✓ Full</span></td><td><span class="check">✓ Yes</span></td><td><span class="cross">✗ English only</span></td><td>⚠ Limited</td></tr>
+        <tr><td>Contract analysis</td><td><span class="check">✓ Structured</span></td><td>Expensive</td><td>Slow</td><td>No structure</td></tr>
+        <tr><td>Legal Advisor brief</td><td><span class="check">✓ Included</span></td><td>Per hour</td><td><span class="cross">✗</span></td><td>No citations</td></tr>
+        <tr><td>Deadline tracking</td><td><span class="check">✓ Auto</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+        <tr><td>Free plan</td><td><span class="check">✓ Yes</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td>✓ (no legal)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="problem-highlight" style="background:#e8f4ea; border-color:#86efac; color:#166534;">
+    🔵 <strong>Blue Ocean:</strong> No direct AI legal competitor exists in Pakistan. First-mover advantage in a massively underserved market.
+  </div>
+</div>
+
+<!-- SECTION 7: TECH STACK -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <h2>Technology Stack</h2>
+  </div>
+  <div class="tech-grid">
+    <div class="tech-card">
+      <div class="tech-icon">⚛️</div>
+      <div><div class="tech-name">Next.js 14 + TypeScript</div><div class="tech-label">Framework — App Router, SSR, API Routes</div></div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🤖</div>
+      <div><div class="tech-name">Anthropic Claude</div><div class="tech-label">AI Engine — claude-sonnet-4-20250514</div></div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🗄️</div>
+      <div><div class="tech-name">Supabase</div><div class="tech-label">PostgreSQL + Auth + Row Level Security</div></div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">💳</div>
+      <div><div class="tech-name">Stripe</div><div class="tech-label">Subscriptions + Billing Portal + Webhooks</div></div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">📧</div>
+      <div><div class="tech-name">Resend</div><div class="tech-label">Transactional email — reminders, onboarding</div></div>
+    </div>
+    <div class="tech-card">
+      <div class="tech-icon">🔒</div>
+      <div><div class="tech-name">Security</div><div class="tech-label">RLS on all tables · Encrypted at rest · No cross-user access</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 8: THE ASK -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <h2>The Ask</h2>
+  </div>
+  <div class="ask-grid">
+    <div class="ask-card"><div class="ask-dot"></div><span>User acquisition &amp; marketing (Pakistan)</span></div>
+    <div class="ask-card"><div class="ask-dot"></div><span>E-signature integration</span></div>
+    <div class="ask-card"><div class="ask-dot"></div><span>JazzCash / EasyPaisa payment gateway</span></div>
+    <div class="ask-card"><div class="ask-dot"></div><span>Lawyer marketplace development</span></div>
+    <div class="ask-card"><div class="ask-dot"></div><span>Mobile app (iOS + Android)</span></div>
+    <div class="ask-card"><div class="ask-dot"></div><span>Pakistan expansion &amp; regional offices</span></div>
+  </div>
+  <div class="closing-banner">
+    <h3>Pakistan's legal market is <span class="gold">$2B+</span> and completely undigitized.</h3>
+    <p>Court of AI is the first AI-native legal platform built specifically for Pakistan. Join us in democratizing legal access for 220 million people.</p>
+  </div>
+</div>
+
+<footer>
+  Court of AI &copy; 2025 &nbsp;|&nbsp; courtofai.pk &nbsp;|&nbsp; Not a licensed law firm
+</footer>
+</body>
+</html>

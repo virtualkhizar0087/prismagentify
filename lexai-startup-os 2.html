@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LexAI — Startup Operating System</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06080f;
+  --surface: #0d1117;
+  --surface2: #111820;
+  --border: rgba(99,179,237,0.12);
+  --accent: #63b3ed;
+  --accent2: #f6e05e;
+  --accent3: #68d391;
+  --accent4: #fc8181;
+  --text: #e8eaf0;
+  --muted: #6b7a8d;
+  --gold: #f6e05e;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;
+  line-height:1.7;
+  overflow-x:hidden;
+}
+
+/* GRID BG */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background-image:
+    linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* HEADER */
+.header{
+  position:relative;
+  padding:50px 60px 40px;
+  border-bottom:1px solid var(--border);
+  z-index:10;
+  background:linear-gradient(180deg, rgba(99,179,237,0.04) 0%, transparent 100%);
+}
+
+.logo-row{
+  display:flex;align-items:center;gap:16px;margin-bottom:28px;
+}
+
+.logo-icon{
+  width:48px;height:48px;
+  border:1px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+  color:var(--accent);
+}
+
+.logo-text{
+  font-family:'Syne',sans-serif;
+  font-size:22px;font-weight:800;
+  letter-spacing:0.05em;
+  color:var(--text);
+}
+.logo-text span{color:var(--accent);}
+
+.status-pill{
+  margin-left:auto;
+  display:flex;align-items:center;gap:8px;
+  background:rgba(104,211,145,0.08);
+  border:1px solid rgba(104,211,145,0.3);
+  padding:6px 16px;
+  font-size:10px;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--accent3);
+}
+.status-pill::before{content:'●';animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.2;}}
+
+h1{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(36px,5.5vw,72px);
+  font-weight:800;
+  line-height:1;
+  color:var(--text);
+  margin-bottom:14px;
+}
+h1 em{
+  font-style:normal;
+  color:var(--accent);
+  display:block;
+  font-size:0.55em;
+  letter-spacing:0.1em;
+  font-weight:600;
+}
+
+.header-sub{
+  font-size:12px;
+  color:var(--muted);
+  max-width:580px;
+  line-height:1.8;
+}
+
+/* NAV */
+.nav{
+  display:flex;gap:2px;
+  padding:0 60px;
+  border-bottom:1px solid var(--border);
+  background:var(--surface);
+  overflow-x:auto;
+  position:sticky;top:0;z-index:100;
+}
+.nav::-webkit-scrollbar{height:2px;}
+.nav::-webkit-scrollbar-thumb{background:var(--accent);}
+
+.nav-btn{
+  padding:14px 20px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  cursor:pointer;
+  border:none;background:none;
+  border-bottom:2px solid transparent;
+  white-space:nowrap;
+  transition:all 0.2s;
+}
+.nav-btn:hover{color:var(--text);}
+.nav-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* PANELS */
+.panel{display:none;padding:50px 60px;position:relative;z-index:1;animation:panelIn 0.35s ease;}
+.panel.active{display:block;}
+@keyframes panelIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* SECTION */
+.sec-label{
+  font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:6px;
+}
+.sec-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(24px,3vw,36px);
+  font-weight:800;color:var(--text);
+  margin-bottom:30px;line-height:1.1;
+}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:28px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+
+/* CARDS */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:24px;
+  transition:all 0.25s;
+}
+.card:hover{border-color:rgba(99,179,237,0.4);background:var(--surface2);}
+
+.kpi{
+  font-family:'Syne',sans-serif;
+  font-size:38px;font-weight:800;
+  color:var(--accent2);
+  line-height:1;margin-bottom:6px;
+}
+.kpi-label{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.kpi-desc{font-size:12px;color:rgba(232,234,240,0.6);line-height:1.6;}
+
+/* WEEK CARDS */
+.week-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-left:3px solid var(--accent);
+  padding:28px;
+  margin-bottom:16px;
+  transition:all 0.25s;
+}
+.week-card:hover{background:var(--surface2);}
+.week-card.phase2{border-left-color:var(--accent2);}
+.week-card.phase3{border-left-color:var(--accent3);}
+.week-card.phase4{border-left-color:var(--accent4);}
+
+.week-num{
+  font-family:'Syne',sans-serif;
+  font-size:11px;font-weight:700;
+  letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:6px;
+}
+.week-card.phase2 .week-num{color:var(--accent2);}
+.week-card.phase3 .week-num{color:var(--accent3);}
+.week-card.phase4 .week-num{color:var(--accent4);}
+
+.week-title{
+  font-family:'Syne',sans-serif;
+  font-size:18px;font-weight:700;
+  color:var(--text);margin-bottom:14px;
+}
+
+.task-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.task-item{
+  display:flex;gap:8px;align-items:flex-start;
+  font-size:11px;color:rgba(232,234,240,0.75);
+  line-height:1.5;
+}
+.task-item::before{content:'›';color:var(--accent);flex-shrink:0;margin-top:1px;font-size:14px;}
+.week-card.phase2 .task-item::before{color:var(--accent2);}
+.week-card.phase3 .task-item::before{color:var(--accent3);}
+.week-card.phase4 .task-item::before{color:var(--accent4);}
+
+.week-goal{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(99,179,237,0.08);border:1px solid rgba(99,179,237,0.2);
+  padding:5px 14px;font-size:10px;
+  color:var(--accent);letter-spacing:0.08em;
+  margin-top:10px;
+}
+.week-card.phase2 .week-goal{background:rgba(246,224,94,0.08);border-color:rgba(246,224,94,0.2);color:var(--accent2);}
+.week-card.phase3 .week-goal{background:rgba(104,211,145,0.08);border-color:rgba(104,211,145,0.2);color:var(--accent3);}
+.week-card.phase4 .week-goal{background:rgba(252,129,129,0.08);border-color:rgba(252,129,129,0.2);color:var(--accent4);}
+
+/* DAILY SCHEDULE */
+.day-block{
+  display:grid;grid-template-columns:90px 1fr;gap:0;
+  margin-bottom:0;
+  border-bottom:1px solid var(--border);
+}
+.day-block:last-child{border-bottom:none;}
+.day-time{
+  padding:16px 20px 16px 0;
+  font-size:11px;color:var(--accent);
+  letter-spacing:0.05em;
+  border-right:1px solid var(--border);
+  font-weight:500;
+}
+.day-content{
+  padding:16px 0 16px 20px;
+}
+.day-activity{
+  font-size:13px;color:var(--text);
+  margin-bottom:4px;font-weight:500;
+}
+.day-note{font-size:11px;color:var(--muted);}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;margin-bottom:28px;}
+th{
+  font-size:10px;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--accent);text-align:left;
+  padding:12px 16px;border-bottom:1px solid var(--border);
+}
+td{
+  padding:13px 16px;font-size:12px;
+  color:rgba(232,234,240,0.75);
+  border-bottom:1px solid rgba(99,179,237,0.06);
+  vertical-align:top;
+}
+tr:hover td{background:rgba(99,179,237,0.03);}
+
+/* HIGHLIGHT */
+.hl{color:var(--accent);}
+.hl2{color:var(--accent2);}
+.hl3{color:var(--accent3);}
+.hl4{color:var(--accent4);}
+
+/* QUOTE BOX */
+.quote{
+  border-left:3px solid var(--accent2);
+  padding:18px 24px;
+  background:rgba(246,224,94,0.04);
+  margin:24px 0;
+  font-family:'Lora',serif;
+  font-style:italic;
+  font-size:16px;
+  color:rgba(232,234,240,0.85);
+  line-height:1.7;
+}
+
+/* PROGRESS */
+.prog-item{margin-bottom:14px;}
+.prog-header{display:flex;justify-content:space-between;margin-bottom:5px;font-size:11px;}
+.prog-bar{height:2px;background:rgba(232,234,240,0.08);}
+.prog-fill{height:100%;transition:width 1.2s ease;}
+
+/* TOOL GRID */
+.tool-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:20px;
+  display:flex;flex-direction:column;gap:10px;
+  transition:all 0.25s;
+}
+.tool-card:hover{border-color:rgba(99,179,237,0.4);}
+.tool-icon{font-size:24px;}
+.tool-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text);}
+.tool-cat{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin-bottom:2px;}
+.tool-desc{font-size:11px;color:var(--muted);line-height:1.6;}
+.tool-cost{font-size:12px;color:var(--accent3);font-weight:500;}
+
+/* CHECKLIST */
+.cl{list-style:none;}
+.cl li{
+  padding:8px 0;font-size:12px;
+  color:rgba(232,234,240,0.75);
+  border-bottom:1px solid var(--border);
+  display:flex;gap:10px;align-items:flex-start;
+}
+.cl li:last-child{border-bottom:none;}
+.cl li::before{content:'→';color:var(--accent);flex-shrink:0;}
+
+/* PHASE BADGE */
+.phase-badge{
+  display:inline-block;
+  padding:3px 12px;
+  font-size:10px;letter-spacing:0.12em;text-transform:uppercase;
+  border:1px solid;margin-bottom:20px;
+}
+.phase-badge.p1{color:var(--accent);border-color:var(--accent);}
+.phase-badge.p2{color:var(--accent2);border-color:var(--accent2);}
+.phase-badge.p3{color:var(--accent3);border-color:var(--accent3);}
+
+/* MARKETING CHANNEL */
+.mkt-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  padding:24px;margin-bottom:14px;
+  display:grid;grid-template-columns:1fr 3fr;gap:20px;
+  transition:all 0.25s;
+}
+.mkt-card:hover{background:var(--surface2);border-color:rgba(99,179,237,0.35);}
+.mkt-meta{border-right:1px solid var(--border);padding-right:20px;}
+.mkt-channel{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.mkt-priority{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;}
+.mkt-roi{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--accent2);margin-top:10px;}
+.mkt-roi-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;}
+.mkt-body{font-size:12px;color:rgba(232,234,240,0.7);line-height:1.7;}
+.mkt-tactics{margin-top:10px;}
+.mkt-tactic{
+  display:inline-block;
+  background:rgba(99,179,237,0.08);
+  border:1px solid rgba(99,179,237,0.15);
+  padding:3px 10px;font-size:10px;
+  color:var(--accent);margin:3px 3px 0 0;
+}
+
+/* DIVIDER */
+hr{border:none;border-top:1px solid var(--border);margin:36px 0;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .header,.nav,.panel{padding-left:20px;padding-right:20px;}
+  .g3,.g4{grid-template-columns:1fr 1fr;}
+  .g2{grid-template-columns:1fr;}
+  .task-grid{grid-template-columns:1fr;}
+  .mkt-card{grid-template-columns:1fr;}
+  .mkt-meta{border-right:none;border-bottom:1px solid var(--border);padding-bottom:16px;}
+  h1{font-size:36px;}
+}
+@media(max-width:600px){
+  .g3,.g4{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-row">
+    <div class="logo-icon">⚖</div>
+    <div class="logo-text">Lex<span>AI</span></div>
+    <div class="status-pill">Startup OS · Active</div>
+  </div>
+  <h1>
+    Your Complete
+    <em>Founder Operating System</em>
+  </h1>
+  <p class="header-sub">Everything you need to build LexAI from zero — daily schedule, weekly plan, tech stack, marketing, funding, and weekly accountability. Built by your AI co-founder.</p>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <button class="nav-btn active" onclick="show('daily')">⏰ Daily Schedule</button>
+  <button class="nav-btn" onclick="show('roadmap')">📅 Week-by-Week</button>
+  <button class="nav-btn" onclick="show('build')">🔨 How to Build</button>
+  <button class="nav-btn" onclick="show('tools')">🛠 Tool Stack</button>
+  <button class="nav-btn" onclick="show('marketing')">📣 Marketing</button>
+  <button class="nav-btn" onclick="show('funding')">💰 Funding</button>
+  <button class="nav-btn" onclick="show('weekly')">📊 Weekly Check-In</button>
+  <button class="nav-btn" onclick="show('mistakes')">⚠️ Avoid These</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PANEL 1: DAILY SCHEDULE -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="daily" class="panel active">
+  <div class="sec-label">Your Daily Operating System</div>
+  <div class="sec-title">The 2-Hour Founder<br>Daily Schedule</div>
+
+  <div class="quote">"Consistency beats intensity. 2 focused hours every day will outperform 14-hour weekend sprints. This schedule is engineered for maximum output in minimum time."</div>
+
+  <div class="g2" style="margin-bottom:36px;">
+    <div>
+      <div class="sec-label" style="margin-bottom:16px;">Weekday Schedule (Mon–Fri)</div>
+      <div style="background:var(--surface);border:1px solid var(--border);">
+        <div class="day-block">
+          <div class="day-time">6:00–6:15</div>
+          <div class="day-content">
+            <div class="day-activity">🧠 Morning Brief (15 min)</div>
+            <div class="day-note">Read your weekly goal card. Write today's 3 micro-tasks. No phone, no social media yet.</div>
+          </div>
+        </div>
+        <div class="day-block">
+          <div class="day-time">6:15–7:15</div>
+          <div class="day-content">
+            <div class="day-activity">⚡ Deep Work Block #1 (60 min)</div>
+            <div class="day-note"><strong style="color:var(--accent)">Weeks 1–4:</strong> User interviews + landing page<br>
+            <strong style="color:var(--accent2)">Weeks 5–12:</strong> Build MVP with Claude/Cursor<br>
+            <strong style="color:var(--accent3)">Weeks 13+:</strong> Ship features + fix bugs</div>
+          </div>
+        </div>
+        <div class="day-block">
+          <div class="day-time">7:15–7:45</div>
+          <div class="day-content">
+            <div class="day-activity">📣 Marketing Block (30 min)</div>
+            <div class="day-note">Write 1 LinkedIn post. Reply to 5 comments. Email 3 potential users. Share 1 insight in a founder Slack group.</div>
+          </div>
+        </div>
+        <div class="day-block">
+          <div class="day-time">7:45–8:00</div>
+          <div class="day-content">
+            <div class="day-activity">📬 Customer Talk (15 min)</div>
+            <div class="day-note">Reply to all user messages. Schedule 1 user interview for the week. Log feedback in Notion.</div>
+          </div>
+        </div>
+        <div class="day-block">
+          <div class="day-time">Evening (optional +30 min)</div>
+          <div class="day-content">
+            <div class="day-activity">📚 Learning Block</div>
+            <div class="day-note">Watch 1 YC lecture or read 1 chapter of a startup book. This is your MBA.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-label" style="margin-bottom:16px;">Weekend Schedule (Sat–Sun)</div>
+      <div style="background:var(--surface);border:1px solid var(--border);">
+        <div class="day-block">
+          <div class="day-time">Saturday</div>
+          <div class="day-content">
+            <div class="day-activity">🔨 Build Day (3–4 hours)</div>
+            <div class="day-note">Longer coding/building session. No meetings. Deep work only. Ship something by end of day — even a tiny feature.</div>
+          </div>
+        </div>
+        <div class="day-block">
+          <div class="day-time">Sunday</div>
+          <div class="day-content">
+            <div class="day-activity">📊 Weekly Review (1 hour)</div>
+            <div class="day-note">Fill in your Weekly Check-In scorecard (Tab 7). Set next week's goals. Write your weekly founder update.</div>
+          </div>
+        </div>
+        <div class="day-block">
+          <div class="day-time">Sunday</div>
+          <div class="day-content">
+            <div class="day-activity">🎯 Strategy Session (1 hour)</div>
+            <div class="day-note">Re-read your roadmap. Adjust priorities. Plan 3 big bets for next week. Batch-create next week's LinkedIn posts.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;background:rgba(104,211,145,0.06);border:1px solid rgba(104,211,145,0.2);padding:20px;">
+        <div class="sec-label" style="color:var(--accent3)">The Iron Rules</div>
+        <ul class="cl">
+          <li>Start your deep work BEFORE checking any notifications</li>
+          <li>Talk to at least 1 user every single day — even just a DM</li>
+          <li>Ship something visible every Friday, no matter how small</li>
+          <li>Never miss two days in a row</li>
+          <li>Every Saturday: write down what you learned this week</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="sec-label">Phase-Specific Deep Work Focus</div>
+  <table>
+    <thead><tr><th>Phase</th><th>Months</th><th>Deep Work Focus (60 min/day)</th><th>Marketing Focus (30 min/day)</th></tr></thead>
+    <tbody>
+      <tr><td class="hl">🔬 Validate</td><td>1–2</td><td>User interviews, landing page, waitlist building</td><td>LinkedIn posts about "legal pain for SMBs", outreach to founders</td></tr>
+      <tr><td class="hl2">🔨 Build</td><td>3–5</td><td>MVP coding with AI tools, core features only</td><td>Build in public — share every milestone, no matter how small</td></tr>
+      <tr><td class="hl3">🚀 Launch</td><td>6–8</td><td>Onboarding, fixing bugs from first users, adding features</td><td>Case studies, cold outreach, ProductHunt launch, SEO</td></tr>
+      <tr><td class="hl4">📈 Scale</td><td>9+</td><td>Feature roadmap, hiring, investor meetings</td><td>Content machine, paid ads, partnerships, referral program</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PANEL 2: WEEK-BY-WEEK ROADMAP -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="roadmap" class="panel">
+  <div class="sec-label">12-Month Execution Plan</div>
+  <div class="sec-title">Week-by-Week<br>from Zero to Revenue</div>
+
+  <div class="g4" style="margin-bottom:36px;">
+    <div class="card"><div class="kpi">Wk 1–4</div><div class="kpi-label">Phase 1: Validate</div><div class="kpi-desc">Prove people will pay before building anything.</div></div>
+    <div class="card"><div class="kpi">Wk 5–16</div><div class="kpi-label">Phase 2: Build</div><div class="kpi-desc">Build MVP using AI tools. Get first 10 users.</div></div>
+    <div class="card"><div class="kpi">Wk 17–26</div><div class="kpi-label">Phase 3: Launch</div><div class="kpi-desc">Public launch. First $1K MRR milestone.</div></div>
+    <div class="card"><div class="kpi">Wk 27+</div><div class="kpi-label">Phase 4: Scale</div><div class="kpi-desc">$10K MRR. Raise pre-seed. Hire first person.</div></div>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase-badge p1">Phase 1 · Validate · Weeks 1–4</div>
+
+  <div class="week-card">
+    <div class="week-num">Week 1</div>
+    <div class="week-title">Define the Pain. Find Real Humans.</div>
+    <div class="task-grid">
+      <div class="task-item">Create a Notion doc: list every legal problem an SMB faces</div>
+      <div class="task-item">Post on LinkedIn: "I'm researching legal pain for small businesses — DM me"</div>
+      <div class="task-item">Find 20 founders on LinkedIn, Reddit r/entrepreneur, r/smallbusiness</div>
+      <div class="task-item">Send 20 DMs: "Would you do a 15-min call about your legal headaches?"</div>
+      <div class="task-item">Set up Calendly for free for interview scheduling</div>
+      <div class="task-item">Read "The Mom Test" by Rob Fitzpatrick (free PDF available)</div>
+    </div>
+    <div class="week-goal">🎯 Goal: 10 interviews booked</div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-num">Week 2</div>
+    <div class="week-title">Interview 10 Founders. Listen Hard.</div>
+    <div class="task-grid">
+      <div class="task-item">Conduct 10 user interviews (15 min each = 2.5 hrs total)</div>
+      <div class="task-item">Record with permission using otter.ai (free tier)</div>
+      <div class="task-item">Ask: "Walk me through the last time you had a legal issue."</div>
+      <div class="task-item">NEVER pitch your product — only listen and ask follow-ups</div>
+      <div class="task-item">Log all pain points in a Notion database with quotes</div>
+      <div class="task-item">Identify the #1 most painful, expensive, frequent problem</div>
+    </div>
+    <div class="week-goal">🎯 Goal: Clear #1 pain point identified with 5+ people confirming it</div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-num">Week 3</div>
+    <div class="week-title">Build a Landing Page. Not a Product.</div>
+    <div class="task-grid">
+      <div class="task-item">Build landing page on Framer.com (free) in 1 day using AI</div>
+      <div class="task-item">One headline: "AI Legal Co-Pilot for Your Business — Save $5,000/Year"</div>
+      <div class="task-item">Add email waitlist form via Tally.so or Typeform (free)</div>
+      <div class="task-item">Add a "Book a demo" button (Calendly link)</div>
+      <div class="task-item">Set up Google Analytics 4 for free tracking</div>
+      <div class="task-item">Share page with your 10 interviewees — ask for honest feedback</div>
+    </div>
+    <div class="week-goal">🎯 Goal: Landing page live. 50 email signups.</div>
+  </div>
+
+  <div class="week-card">
+    <div class="week-num">Week 4</div>
+    <div class="week-title">Validate Willingness to Pay.</div>
+    <div class="task-grid">
+      <div class="task-item">Add a pricing page: $49/mo Starter · $99/mo Pro · $299/mo Team</div>
+      <div class="task-item">Offer 3 months free to first 10 beta customers (in exchange for feedback)</div>
+      <div class="task-item">Set up Stripe account — you need to be able to take payment</div>
+      <div class="task-item">DM your warmest leads: "Would you pay $49/month for this?"</div>
+      <div class="task-item">Apply to Y Combinator — deadline research, start the application</div>
+      <div class="task-item">Register Delaware C-Corp via Stripe Atlas ($500 one-time)</div>
+    </div>
+    <div class="week-goal">🎯 Goal: 3 people say "yes I'd pay" — even verbally. YC application started.</div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase-badge p2" style="margin-top:30px;">Phase 2 · Build MVP · Weeks 5–16</div>
+
+  <div class="week-card phase2">
+    <div class="week-num">Weeks 5–6</div>
+    <div class="week-title">Set Up Your Tech Stack</div>
+    <div class="task-grid">
+      <div class="task-item">Set up Next.js project (your frontend framework)</div>
+      <div class="task-item">Connect Supabase for database + auth (free tier)</div>
+      <div class="task-item">Connect Stripe for payments</div>
+      <div class="task-item">Deploy on Vercel (free tier)</div>
+      <div class="task-item">Get Anthropic API key (Claude) — this is your AI brain</div>
+      <div class="task-item">Use Cursor AI to write 80% of your code</div>
+    </div>
+    <div class="week-goal">🎯 Goal: "Hello World" app deployed live on the internet</div>
+  </div>
+
+  <div class="week-card phase2">
+    <div class="week-num">Weeks 7–10</div>
+    <div class="week-title">Build Feature #1: Contract Review AI</div>
+    <div class="task-grid">
+      <div class="task-item">Upload PDF → Claude reads contract → returns plain English summary</div>
+      <div class="task-item">Highlight risky clauses in red (Claude identifies them)</div>
+      <div class="task-item">Add "What does this mean?" button for every clause</div>
+      <div class="task-item">Test with 10 real contracts from your beta users</div>
+      <div class="task-item">Get feedback after every build session — don't wait</div>
+      <div class="task-item">Keep it ugly — functionality beats design at this stage</div>
+    </div>
+    <div class="week-goal">🎯 Goal: 3 beta users use it on their real contracts. Get written testimonial.</div>
+  </div>
+
+  <div class="week-card phase2">
+    <div class="week-num">Weeks 11–13</div>
+    <div class="week-title">Build Feature #2: AI Legal Q&A</div>
+    <div class="task-grid">
+      <div class="task-item">Chat interface: user asks any legal question in plain English</div>
+      <div class="task-item">Claude answers with jurisdiction awareness (US vs UK vs EU)</div>
+      <div class="task-item">Add disclaimer: "This is not legal advice. Always consult a lawyer."</div>
+      <div class="task-item">Build question history so users can reference past answers</div>
+      <div class="task-item">Add "share with lawyer" button for escalation</div>
+      <div class="task-item">Test with 5 real legal scenarios your interview users mentioned</div>
+    </div>
+    <div class="week-goal">🎯 Goal: Users spending 10+ minutes per session. Low bounce rate.</div>
+  </div>
+
+  <div class="week-card phase2">
+    <div class="week-num">Weeks 14–16</div>
+    <div class="week-title">Build Feature #3: Document Generator</div>
+    <div class="task-grid">
+      <div class="task-item">NDA generator: fill form → Claude generates custom NDA in seconds</div>
+      <div class="task-item">Freelancer contract template generator</div>
+      <div class="task-item">Employment agreement template</div>
+      <div class="task-item">Add e-signature via DocuSign API (free tier)</div>
+      <div class="task-item">Build subscription paywall — free tier = 3 docs/month; paid = unlimited</div>
+      <div class="task-item">Onboard your first 10 beta users to paid plans ($0 or $49)</div>
+    </div>
+    <div class="week-goal">🎯 Goal: Product works end-to-end. 10 users on beta. First $0 revenue confirmed.</div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase-badge p3" style="margin-top:30px;">Phase 3 · Launch · Weeks 17–26</div>
+
+  <div class="week-card phase3">
+    <div class="week-num">Weeks 17–20</div>
+    <div class="week-title">Public Launch. First Revenue.</div>
+    <div class="task-grid">
+      <div class="task-item">Polish UI — use a template from Shadcn/ui to look professional fast</div>
+      <div class="task-item">Write 3 case studies from beta users (with permission)</div>
+      <div class="task-item">Launch on ProductHunt — prepare 2 weeks in advance</div>
+      <div class="task-item">Cold email 100 small business owners using Apollo.io</div>
+      <div class="task-item">Post launch story on LinkedIn, Reddit r/startups, IndieHackers</div>
+      <div class="task-item">Offer 1-month free trial for first 50 sign-ups via promo code</div>
+    </div>
+    <div class="week-goal">🎯 Goal: 50 active users. First $500 MRR. At least 1 paying customer</div>
+  </div>
+
+  <div class="week-card phase3">
+    <div class="week-num">Weeks 21–26</div>
+    <div class="week-title">Growth Engine. $1K–$5K MRR.</div>
+    <div class="task-grid">
+      <div class="task-item">Interview every churned user — fix the #1 reason they left</div>
+      <div class="task-item">Launch referral program: give 1 month free for each referral</div>
+      <div class="task-item">Partner with 3 accountants or bookkeepers to refer clients</div>
+      <div class="task-item">Start SEO content: 2 blog posts/week on legal topics for SMBs</div>
+      <div class="task-item">Reach $1K MRR → apply for YC or begin angel investor outreach</div>
+      <div class="task-item">Set up Intercom/Crisp for in-app support (free tier)</div>
+    </div>
+    <div class="week-goal">🎯 Goal: $1K–$5K MRR. 50+ active users. Clear growth channel identified.</div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="week-card phase4" style="margin-top:10px;">
+    <div class="week-num">Month 7–12 · Scale Phase</div>
+    <div class="week-title">$10K MRR → Raise → Hire</div>
+    <div class="task-grid">
+      <div class="task-item">Double down on your #1 acquisition channel</div>
+      <div class="task-item">Hire 1 part-time developer via Toptal or Upwork ($30/hr)</div>
+      <div class="task-item">Raise $500K–$2M pre-seed from angels or YC</div>
+      <div class="task-item">Launch EU version: UK + Germany market entry</div>
+      <div class="task-item">Build lawyer marketplace: vet 20 SMB-friendly lawyers</div>
+      <div class="task-item">Set up a monthly founder newsletter for investors + users</div>
+    </div>
+    <div class="week-goal">🎯 Goal: $10K MRR → Raise $500K–$2M → $20K MRR in Month 12</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PANEL 3: HOW TO BUILD -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="build" class="panel">
+  <div class="sec-label">Technical Blueprint</div>
+  <div class="sec-title">How to Build LexAI<br>With Zero Coding Experience</div>
+
+  <div class="quote">"You don't need to be a developer to build this. You need to be good at describing what you want. AI writes the code. You ship the product."</div>
+
+  <div class="g2" style="margin-bottom:36px;">
+    <div>
+      <div class="sec-label">Your Tech Stack (Total: ~$50/month to start)</div>
+      <table>
+        <thead><tr><th>Layer</th><th>Tool</th><th>Cost</th></tr></thead>
+        <tbody>
+          <tr><td class="hl">Frontend</td><td>Next.js 14 (React)</td><td class="hl3">Free</td></tr>
+          <tr><td class="hl">Styling</td><td>Tailwind CSS + Shadcn/ui</td><td class="hl3">Free</td></tr>
+          <tr><td class="hl">Database</td><td>Supabase (Postgres)</td><td class="hl3">Free → $25/mo</td></tr>
+          <tr><td class="hl">Auth</td><td>Supabase Auth or Clerk</td><td class="hl3">Free → $25/mo</td></tr>
+          <tr><td class="hl">AI Brain</td><td>Claude API (Anthropic)</td><td class="hl2">~$20–50/mo</td></tr>
+          <tr><td class="hl">Payments</td><td>Stripe</td><td class="hl3">0.7% + fees</td></tr>
+          <tr><td class="hl">Hosting</td><td>Vercel</td><td class="hl3">Free → $20/mo</td></tr>
+          <tr><td class="hl">Email</td><td>Resend</td><td class="hl3">Free → $20/mo</td></tr>
+          <tr><td class="hl">PDF Processing</td><td>PDF.co or LangChain</td><td class="hl2">$20/mo</td></tr>
+          <tr><td class="hl">Coding AI</td><td>Cursor IDE</td><td class="hl2">$20/mo</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="sec-label">How Claude AI Powers the Product</div>
+      <div style="background:var(--surface);border:1px solid var(--border);padding:20px;">
+        <ul class="cl">
+          <li><strong style="color:var(--accent)">Contract Review:</strong> User uploads PDF → you extract text → send to Claude with prompt: "Review this contract and identify risky clauses in simple English"</li>
+          <li><strong style="color:var(--accent)">Legal Q&A:</strong> User types question → Claude answers with jurisdiction context you provide in system prompt</li>
+          <li><strong style="color:var(--accent)">Document Generation:</strong> User fills form → you build a prompt template → Claude generates full legal document</li>
+          <li><strong style="color:var(--accent)">Compliance Check:</strong> User describes business → Claude checks against GDPR, employment law, etc.</li>
+          <li><strong style="color:var(--accent)">Plain English:</strong> Paste any legal clause → Claude explains it in 1 sentence</li>
+        </ul>
+      </div>
+
+      <div style="margin-top:16px;background:rgba(246,224,94,0.04);border:1px solid rgba(246,224,94,0.2);padding:20px;">
+        <div class="sec-label" style="color:var(--accent2)">If You Can't Code At All</div>
+        <ul class="cl">
+          <li>Use <strong style="color:var(--text)">Lovable.dev</strong> — describe your app in plain English, it builds it</li>
+          <li>Use <strong style="color:var(--text)">Bubble.io</strong> — no-code visual builder with Claude API plugin</li>
+          <li>Use <strong style="color:var(--text)">Cursor AI</strong> — type what you want, it writes the code for you</li>
+          <li>Hire 1 developer on Fiverr for $500 to set up your boilerplate</li>
+          <li>Use Claude itself to write every single line of code for you</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="sec-label">Step-by-Step: Building Contract Review (Your First Feature)</div>
+  <div class="g2">
+    <div class="card">
+      <div class="kpi-label">Step 1: Create the upload page</div>
+      <div class="kpi-desc" style="margin-top:10px;font-size:12px;">Tell Cursor: <em style="color:var(--accent2)">"Create a Next.js page where users can upload a PDF file. Show a loading spinner while it processes. Display the extracted text in a text area."</em></div>
+    </div>
+    <div class="card">
+      <div class="kpi-label">Step 2: Extract PDF text</div>
+      <div class="kpi-desc" style="margin-top:10px;font-size:12px;">Tell Cursor: <em style="color:var(--accent2)">"Add an API route that accepts a PDF, extracts the text using pdf-parse library, and returns the text as JSON."</em></div>
+    </div>
+    <div class="card">
+      <div class="kpi-label">Step 3: Send to Claude</div>
+      <div class="kpi-desc" style="margin-top:10px;font-size:12px;">Tell Cursor: <em style="color:var(--accent2)">"Call the Anthropic API with this system prompt: 'You are a legal expert. Review this contract and return: 1) Plain English summary 2) Top 5 risky clauses 3) Red flags to watch.' Format response as JSON."</em></div>
+    </div>
+    <div class="card">
+      <div class="kpi-label">Step 4: Display results</div>
+      <div class="kpi-desc" style="margin-top:10px;font-size:12px;">Tell Cursor: <em style="color:var(--accent2)">"Display the contract review results in cards. Show risky clauses highlighted in red. Add an 'Explain this' button that calls Claude for deeper explanation of each clause."</em></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PANEL 4: TOOL STACK -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="tools" class="panel">
+  <div class="sec-label">Your Complete AI Toolkit</div>
+  <div class="sec-title">Every Tool You Need<br>(Total: ~$150/month)</div>
+
+  <div class="g3">
+    <div class="tool-card">
+      <div class="tool-icon">🤖</div>
+      <div class="tool-cat">Core AI</div>
+      <div class="tool-name">Claude (Anthropic)</div>
+      <div class="tool-desc">The intelligence behind your product. Use Claude API for all legal analysis, Q&A, and document generation. Also use it to write your code, marketing copy, and emails.</div>
+      <div class="tool-cost">$20–100/month (API usage)</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">💻</div>
+      <div class="tool-cat">Coding</div>
+      <div class="tool-name">Cursor IDE</div>
+      <div class="tool-desc">AI-powered code editor. Describe what you want in English, it writes the code. Best tool for solo founders who know some coding. 2–3x speed improvement guaranteed.</div>
+      <div class="tool-cost">$20/month</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🚀</div>
+      <div class="tool-cat">No-Code Build</div>
+      <div class="tool-name">Lovable.dev</div>
+      <div class="tool-desc">If you can't code at all — describe your app in plain English and get a working full-stack app with database, auth, and payments. Can launch in days not months.</div>
+      <div class="tool-cost">$20–50/month</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🗄️</div>
+      <div class="tool-cat">Backend</div>
+      <div class="tool-name">Supabase</div>
+      <div class="tool-desc">Database + authentication + storage. Free tier is generous. Postgres database. Built-in auth system. No need to build login/signup from scratch.</div>
+      <div class="tool-cost">Free → $25/month</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">💳</div>
+      <div class="tool-cat">Payments</div>
+      <div class="tool-name">Stripe</div>
+      <div class="tool-desc">Industry standard for SaaS subscriptions. Handles monthly billing, trials, upgrades, and refunds. Integrates with Next.js in 30 minutes.</div>
+      <div class="tool-cost">2.9% + 30¢ per transaction</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🌐</div>
+      <div class="tool-cat">Hosting</div>
+      <div class="tool-name">Vercel</div>
+      <div class="tool-desc">Deploy your Next.js app in 1 click. Free tier handles thousands of users. Automatic HTTPS. Global CDN. Zero configuration needed.</div>
+      <div class="tool-cost">Free → $20/month</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📝</div>
+      <div class="tool-cat">Workspace</div>
+      <div class="tool-name">Notion</div>
+      <div class="tool-desc">Your entire startup brain: CRM, roadmap, user research, documentation, investor updates. Free for solo founders. Replaces 5 tools.</div>
+      <div class="tool-cost">Free</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📧</div>
+      <div class="tool-cat">Email</div>
+      <div class="tool-name">Loops.so or Resend</div>
+      <div class="tool-desc">Send onboarding emails, product updates, and drip campaigns. Integrates with your app. Free tier covers first 1,000 users comfortably.</div>
+      <div class="tool-cost">Free → $20/month</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📊</div>
+      <div class="tool-cat">Analytics</div>
+      <div class="tool-name">PostHog</div>
+      <div class="tool-desc">Product analytics: track which features users use, where they drop off, conversion funnels. Open source. Free tier is very generous for early stage.</div>
+      <div class="tool-cost">Free → $20/month</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🎨</div>
+      <div class="tool-cat">Landing Page</div>
+      <div class="tool-name">Framer</div>
+      <div class="tool-desc">Build a beautiful, conversion-optimized landing page without code. AI generates the entire site from your text prompt. Publish in one day.</div>
+      <div class="tool-cost">Free → $15/month</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📞</div>
+      <div class="tool-cat">User Interviews</div>
+      <div class="tool-name">Cal.com + Otter.ai</div>
+      <div class="tool-desc">Cal.com: free Calendly alternative for booking interviews. Otter.ai: AI transcription so you can focus on listening, not note-taking during calls.</div>
+      <div class="tool-cost">Both free tiers</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📣</div>
+      <div class="tool-cat">Outreach</div>
+      <div class="tool-name">Apollo.io</div>
+      <div class="tool-desc">Find email addresses of small business owners, founders, and decision makers. Free tier gives 50 credits/month. Enough for early-stage cold outreach.</div>
+      <div class="tool-cost">Free → $49/month</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PANEL 5: MARKETING -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="marketing" class="panel">
+  <div class="sec-label">Growth Playbook</div>
+  <div class="sec-title">How to Get Your<br>First 1,000 Customers</div>
+
+  <div class="quote">"80% of B2B leads from social come from LinkedIn. Legal, Finance, and SMB make up 55% of all AI-referral traffic. You are in the perfect sector at the perfect time."</div>
+
+  <div class="mkt-card">
+    <div class="mkt-meta">
+      <div class="mkt-channel">LinkedIn</div>
+      <div class="mkt-priority hl">Priority #1</div>
+      <div class="mkt-roi">277%</div>
+      <div class="mkt-roi-label">better leads vs other platforms</div>
+    </div>
+    <div class="mkt-body">
+      <strong style="color:var(--text)">Your most powerful channel.</strong> Post as a founder, not a brand. Share your building journey daily. Founder-led content gets 7× more impressions than company pages. Your target audience — business owners, startup founders, SMB operators — is on LinkedIn every day.<br><br>
+      <strong style="color:var(--accent)">Content formula (3 posts/week):</strong> 1 educational post (legal tip for SMBs) + 1 build-in-public update + 1 personal founder story. Use hooks like: "The $10K legal mistake every startup makes in year 1." Never pitch. Always teach.<br><br>
+      <div class="mkt-tactics">
+        <span class="mkt-tactic">Build in Public</span>
+        <span class="mkt-tactic">Legal Tips for Founders</span>
+        <span class="mkt-tactic">Founder Stories</span>
+        <span class="mkt-tactic">DM warm leads</span>
+        <span class="mkt-tactic">Comment on legal threads</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mkt-card">
+    <div class="mkt-meta">
+      <div class="mkt-channel">SEO + Content</div>
+      <div class="mkt-priority hl2">Priority #2</div>
+      <div class="mkt-roi">10–25×</div>
+      <div class="mkt-roi-label">more conversions from bottom-funnel SEO</div>
+    </div>
+    <div class="mkt-body">
+      <strong style="color:var(--text)">Your long-term moat.</strong> Target bottom-of-funnel keywords where buyers are ready to pay: "how to write an NDA for my business," "GDPR compliance checklist for startups," "employment contract template UK." These convert at 10–25× better than generic top-of-funnel content.<br><br>
+      <strong style="color:var(--accent)">SEO strategy for 2026:</strong> Optimize for AI search — ChatGPT, Perplexity, and Claude are now referring legal traffic. Legal, Finance, and SMB make up 55% of all AI-search sessions. Write structured, expert content that AI tools can easily cite. 2 blog posts/week minimum starting Month 3.<br><br>
+      <div class="mkt-tactics">
+        <span class="mkt-tactic">Pain Point SEO</span>
+        <span class="mkt-tactic">AI Search Optimization</span>
+        <span class="mkt-tactic">Legal FAQ content</span>
+        <span class="mkt-tactic">Free legal templates</span>
+        <span class="mkt-tactic">Comparison pages</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mkt-card">
+    <div class="mkt-meta">
+      <div class="mkt-channel">Cold Outreach</div>
+      <div class="mkt-priority hl3">Priority #3</div>
+      <div class="mkt-roi">5–8%</div>
+      <div class="mkt-roi-label">reply rate with personalization</div>
+    </div>
+    <div class="mkt-body">
+      <strong style="color:var(--text)">Fastest path to first customers.</strong> Find 50 founders per week on LinkedIn/Apollo. Send a hyper-personalized cold DM: reference something specific about their company, mention you saw they recently raised, hired, or launched. Offer a free 30-min legal audit using your tool.<br><br>
+      <strong style="color:var(--accent)">Template:</strong> "Hey [Name], I saw [Company] just launched [Product]. Congrats! I'm building LexAI — an AI tool that helps startups handle contracts and compliance without $500/hr lawyers. I'd love to give you a free legal audit of your key contracts. 15 min call this week?"<br><br>
+      <div class="mkt-tactics">
+        <span class="mkt-tactic">LinkedIn DMs</span>
+        <span class="mkt-tactic">Cold email via Apollo</span>
+        <span class="mkt-tactic">Free audit offer</span>
+        <span class="mkt-tactic">Reddit r/startups</span>
+        <span class="mkt-tactic">IndieHackers</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mkt-card">
+    <div class="mkt-meta">
+      <div class="mkt-channel">Partnerships</div>
+      <div class="mkt-priority" style="color:var(--accent4)">Priority #4</div>
+      <div class="mkt-roi">Zero</div>
+      <div class="mkt-roi-label">cost, high trust referrals</div>
+    </div>
+    <div class="mkt-body">
+      <strong style="color:var(--text)">Your secret weapon for scale.</strong> Accountants, bookkeepers, and startup advisors all have clients who need legal help. Partner with 10 accountants who serve SMBs — offer them a 20% referral commission or a free account. One accountant = access to 50–200 small business clients.<br><br>
+      <strong style="color:var(--accent)">Other partner channels:</strong> Co-working spaces (they have dozens of startups), startup accelerators (give members free access), business banks like Tide, Starling, or Mercury (they serve SMBs). HR platforms, payroll tools — everyone serving SMBs is a potential distribution partner.<br><br>
+      <div class="mkt-tactics">
+        <span class="mkt-tactic">Accountant referrals</span>
+        <span class="mkt-tactic">Startup accelerators</span>
+        <span class="mkt-tactic">Business banks</span>
+        <span class="mkt-tactic">HR platforms</span>
+        <span class="mkt-tactic">Co-working spaces</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mkt-card">
+    <div class="mkt-meta">
+      <div class="mkt-channel">ProductHunt</div>
+      <div class="mkt-priority hl">One-Time Big Launch</div>
+      <div class="mkt-roi">500–2K</div>
+      <div class="mkt-roi-label">users from a top 5 launch</div>
+    </div>
+    <div class="mkt-body">
+      <strong style="color:var(--text)">A well-prepared launch can get 500–2,000 signups in a day.</strong> Start building your ProductHunt following 4 weeks before launch. Get 50+ people to agree to upvote on launch day. Launch on Tuesday at midnight PST (best day and time). Write a compelling story about why you built this.<br><br>
+      <strong style="color:var(--accent)">Pre-launch checklist:</strong> Great screenshots, demo video under 90 seconds, clear tagline, first comment from you telling your story, email blast to your waitlist on launch morning. Respond to every single comment within 1 hour of launch.<br><br>
+      <div class="mkt-tactics">
+        <span class="mkt-tactic">Pre-launch community building</span>
+        <span class="mkt-tactic">Email waitlist blast</span>
+        <span class="mkt-tactic">Demo video</span>
+        <span class="mkt-tactic">Tuesday launch</span>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="sec-label">Monthly Marketing Calendar Template</div>
+  <table>
+    <thead><tr><th>Week</th><th>Content (LinkedIn)</th><th>Outreach</th><th>Growth Experiment</th></tr></thead>
+    <tbody>
+      <tr><td class="hl">Week 1</td><td>3 posts: legal tip + build update + founder story</td><td>50 LinkedIn DMs to founders</td><td>Test 2 different cold email subject lines</td></tr>
+      <tr><td class="hl">Week 2</td><td>3 posts: case study + tool demo + legal FAQ</td><td>Follow up on Week 1 DMs</td><td>Post in 3 Reddit communities</td></tr>
+      <tr><td class="hl">Week 3</td><td>3 posts: client win + legal tip + poll ("What's your #1 legal fear?")</td><td>Email 5 accountants about partnership</td><td>Publish 1 SEO blog post</td></tr>
+      <tr><td class="hl">Week 4</td><td>3 posts: monthly reflection + results + teaser for next feature</td><td>Follow up on all warm leads</td><td>A/B test landing page headline</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PANEL 6: FUNDING -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="funding" class="panel">
+  <div class="sec-label">Investor Strategy</div>
+  <div class="sec-title">Raise Smart.<br>Not Desperate.</div>
+
+  <div class="quote">"Don't raise money until you have something to show. $1K MRR is worth more in a pitch than 10,000 users who don't pay. Traction silences every objection."</div>
+
+  <div class="g3" style="margin-bottom:36px;">
+    <div class="card">
+      <div class="kpi">$0</div>
+      <div class="kpi-label">Before Month 6</div>
+      <div class="kpi-desc">Bootstrap with your own savings or freelance income. Keep costs under $200/month using free tiers. Validate before raising.</div>
+    </div>
+    <div class="card">
+      <div class="kpi">$500K</div>
+      <div class="kpi-label">Pre-Seed (Month 6–12)</div>
+      <div class="kpi-desc">YC ($500K for 7%) or angels once you have $1K+ MRR. This funds your first hire and EU expansion.</div>
+    </div>
+    <div class="card">
+      <div class="kpi">$5–15M</div>
+      <div class="kpi-label">Series A (Year 2–3)</div>
+      <div class="kpi-desc">a16z, Bessemer, or Index Ventures once you hit $1M ARR. 20% of company. Funds team of 20 + global expansion.</div>
+    </div>
+  </div>
+
+  <div class="sec-label">Y Combinator Application Guide</div>
+  <div class="g2" style="margin-bottom:30px;">
+    <div class="card">
+      <div class="kpi-label" style="margin-bottom:14px;">What YC Actually Looks For</div>
+      <ul class="cl">
+        <li><strong style="color:var(--accent)">Exceptional founders</strong> — obsessed with the problem, move fast</li>
+        <li><strong style="color:var(--accent)">Real traction</strong> — even 10 paying customers is huge at YC stage</li>
+        <li><strong style="color:var(--accent)">Large market</strong> — legal is a $1.2T market, that's automatic credibility</li>
+        <li><strong style="color:var(--accent)">Unique insight</strong> — why does LexAI win? "SMBs are legally orphaned."</li>
+        <li><strong style="color:var(--accent)">Why now?</strong> — Claude AI makes this possible for the first time at $50/mo cost</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="kpi-label" style="margin-bottom:14px;">YC Application Questions (Prepare Now)</div>
+      <ul class="cl">
+        <li>"What do you do?" → 1 sentence. "AI legal co-pilot for small businesses."</li>
+        <li>"What's the problem?" → 33M SMBs can't afford lawyers. We fix that.</li>
+        <li>"How big?" → $1.2T legal market, 0.1% = $1.2B business</li>
+        <li>"What's your traction?" → X users, $Y MRR, Z% MoM growth</li>
+        <li>"Why you?" → Your unique insight from the user interviews</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec-label">The Perfect Investor Pitch (3 Slides)</div>
+  <div class="g3">
+    <div class="card" style="border-color:rgba(99,179,237,0.4);">
+      <div class="kpi-label">Slide 1: The Problem</div>
+      <div class="kpi-desc" style="margin-top:12px;font-size:13px;line-height:1.8;">
+        <span class="hl">33 million small businesses</span> in USA + Europe spend $30B/year on legal fees — or operate with dangerous legal exposure.<br><br>
+        A simple employment dispute costs <span class="hl2">$40,000</span> in legal fees on average. A poorly written contract can sink your business. Yet 76% of SMBs can't afford a proper lawyer.
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(246,224,94,0.4);">
+      <div class="kpi-label">Slide 2: Our Solution</div>
+      <div class="kpi-desc" style="margin-top:12px;font-size:13px;line-height:1.8;">
+        LexAI: AI legal co-pilot for SMBs. <span class="hl3">$99/month</span> vs $500/hour for a lawyer.<br><br>
+        Review contracts in 30 seconds. Answer any legal question. Generate NDAs and employment agreements. GDPR compliance dashboard. Escalate to real lawyers when needed.
+      </div>
+    </div>
+    <div class="card" style="border-color:rgba(104,211,145,0.4);">
+      <div class="kpi-label">Slide 3: Traction & Ask</div>
+      <div class="kpi-desc" style="margin-top:12px;font-size:13px;line-height:1.8;">
+        <span class="hl">X paying customers</span>, $Y MRR, growing Z% month-over-month.<br><br>
+        Raising <span class="hl2">$500K</span> to reach $10K MRR in 12 months and begin EU expansion. Competitors (Harvey AI, LegalZoom) ignore the $30B SMB market we own.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PANEL 7: WEEKLY CHECK-IN -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="weekly" class="panel">
+  <div class="sec-label">Weekly Accountability System</div>
+  <div class="sec-title">Your Weekly<br>Founder Scorecard</div>
+
+  <div class="quote">"What gets measured gets improved. Every Sunday, fill in these numbers. Your business is growing if the trend is up. If numbers are flat for 2 weeks — something is broken. Fix it immediately."</div>
+
+  <div class="sec-label">Key Metrics to Track Every Week</div>
+  <table style="margin-bottom:36px;">
+    <thead><tr><th>Metric</th><th>What It Measures</th><th>Green Zone</th><th>Red Flag</th><th>Action if Red</th></tr></thead>
+    <tbody>
+      <tr><td class="hl">MRR (Monthly Recurring Revenue)</td><td>Core health of business</td><td class="hl3">Growing 10–20%/month</td><td class="hl4">Flat for 2+ weeks</td><td>Talk to users. Fix product or pricing.</td></tr>
+      <tr><td class="hl">New Users This Week</td><td>Acquisition working?</td><td class="hl3">5+ new users</td><td class="hl4">0–2 per week</td><td>Double your outreach volume immediately</td></tr>
+      <tr><td class="hl">Churn Rate</td><td>Product is working?</td><td class="hl3">Under 5%/month</td><td class="hl4">Over 8%/month</td><td>Interview every churned user same day</td></tr>
+      <tr><td class="hl">User Interviews Done</td><td>Staying close to customers?</td><td class="hl3">2–3 per week</td><td class="hl4">0 for 2+ weeks</td><td>Block 2 hours immediately for outreach</td></tr>
+      <tr><td class="hl">LinkedIn Posts Published</td><td>Marketing momentum?</td><td class="hl3">3 per week</td><td class="hl4">0–1 per week</td><td>Batch-create 2 weeks of posts in one session</td></tr>
+      <tr><td class="hl">Features Shipped</td><td>Building fast enough?</td><td class="hl3">1+ per week</td><td class="hl4">Nothing shipped in 2 weeks</td><td>Remove scope. Ship smaller, faster.</td></tr>
+      <tr><td class="hl">NPS (Net Promoter Score)</td><td>Do users love it?</td><td class="hl3">40+</td><td class="hl4">Below 20</td><td>Deep user interviews. Identify core frustration.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec-label">Weekly Follow-Up Questions (Answer Every Sunday)</div>
+  <div class="g2">
+    <div class="card">
+      <div class="kpi-label" style="margin-bottom:14px;">Review (Looking Back)</div>
+      <ul class="cl">
+        <li>What were my 3 goals last week? Did I hit them?</li>
+        <li>What was my biggest win this week? (Celebrate it.)</li>
+        <li>What slowed me down the most? How do I prevent it next week?</li>
+        <li>What did I learn from users this week?</li>
+        <li>What do users LOVE about LexAI right now?</li>
+        <li>What do users HATE or complain about most?</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="kpi-label" style="margin-bottom:14px;">Planning (Looking Forward)</div>
+      <ul class="cl">
+        <li>What are my 3 non-negotiable goals for next week?</li>
+        <li>What is the ONE thing that will move the needle most?</li>
+        <li>Which marketing channel is working? Double down on it.</li>
+        <li>Who should I reach out to this week? (Specific names)</li>
+        <li>What feature request have I heard 3+ times? Build it next.</li>
+        <li>What would I regret NOT doing this week?</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="sec-label">Monthly Milestone Targets</div>
+  <table>
+    <thead><tr><th>Month</th><th>Revenue Target</th><th>User Target</th><th>Key Milestone</th><th>If Behind — Do This</th></tr></thead>
+    <tbody>
+      <tr><td class="hl">Month 1–2</td><td>$0</td><td>50 waitlist signups</td><td>10 user interviews done. Pain point confirmed.</td><td>Post in 5 more communities. Be more specific in targeting.</td></tr>
+      <tr><td class="hl">Month 3–4</td><td>$0–$500</td><td>10 beta users</td><td>MVP live. First 3 paying customers.</td><td>Give free access to 20 people in exchange for testimonials.</td></tr>
+      <tr><td class="hl">Month 5–6</td><td>$1K MRR</td><td>50 users</td><td>Public launch. ProductHunt.</td><td>Lower price. Offer unlimited free trial. Fix #1 complaint.</td></tr>
+      <tr><td class="hl">Month 7–9</td><td>$3–5K MRR</td><td>150 users</td><td>Clear growth channel. Referral system.</td><td>Cold email 200 people. Partner with 5 accountants.</td></tr>
+      <tr><td class="hl2">Month 10–12</td><td>$10K MRR</td><td>400 users</td><td>Raise pre-seed or YC. EU expansion.</td><td>Raise prices. Add enterprise tier. Interview 20 churned users.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- PANEL 8: AVOID THESE -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="mistakes" class="panel">
+  <div class="sec-label">Founder Survival Guide</div>
+  <div class="sec-title">The 10 Mistakes That<br>Kill Startups</div>
+
+  <div class="quote">"Most startups don't fail because of competition or bad luck. They fail because the founder stopped talking to users, built the wrong thing, or ran out of energy. Avoid these mistakes and you are in the top 10%."</div>
+
+  <div class="g2">
+    <div>
+      <div class="week-card phase4">
+        <div class="week-num">Fatal Mistake #1</div>
+        <div class="week-title">Building Without Talking to Users</div>
+        <div class="kpi-desc">You lock yourself in a room for 3 months and build. You launch. Nobody uses it. The fix: talk to 1 user every single day. Even a quick 5-minute DM counts. Build what they ask for, not what you imagine they want.</div>
+      </div>
+      <div class="week-card phase4">
+        <div class="week-num">Fatal Mistake #2</div>
+        <div class="week-title">Waiting Until It's "Ready" to Launch</div>
+        <div class="kpi-desc">There is no ready. Launch when it works for 1 person. Paul Graham's rule: "If you're not embarrassed by your first version, you launched too late." Launch ugly. Fix in public. Speed beats perfection every time.</div>
+      </div>
+      <div class="week-card phase4">
+        <div class="week-num">Fatal Mistake #3</div>
+        <div class="week-title">Spending Money Before Revenue</div>
+        <div class="kpi-desc">Do not spend $5,000 on a logo, $3,000 on a website designer, or $10,000 on ads before you have 10 paying customers. Every dollar you spend before product-market fit is a dollar you'll regret. Bootstrap hard. Your total cost should be under $200/month until $1K MRR.</div>
+      </div>
+      <div class="week-card phase4">
+        <div class="week-num">Fatal Mistake #4</div>
+        <div class="week-title">Building Too Many Features</div>
+        <div class="kpi-desc">You want to build 20 features. Build 3. Pick the ones that directly reduce the #1 pain your users described. Everything else goes to a "Future" list. Every feature you add before launch is a feature that delayed your launch by a week.</div>
+      </div>
+      <div class="week-card phase4">
+        <div class="week-num">Fatal Mistake #5</div>
+        <div class="week-title">Giving Up After 3 Months</div>
+        <div class="kpi-desc">Most startups that succeed took 12–24 months to find product-market fit. The overnight successes took years. Set a minimum commitment: "I will work on this for 12 months before considering quitting." Show up every day. Progress is invisible until it isn't.</div>
+      </div>
+    </div>
+    <div>
+      <div class="week-card phase4">
+        <div class="week-num">Fatal Mistake #6</div>
+        <div class="week-title">Pricing Too Low</div>
+        <div class="kpi-desc">Founders are scared of charging money. They price at $9/month. At $9/month you need 11,000 customers for $100K ARR. At $99/month you need 1,000. At $299/month you need 333. Charge more. Customers who pay more are better customers. They use the product, give feedback, and stay longer.</div>
+      </div>
+      <div class="week-card phase4">
+        <div class="week-num">Fatal Mistake #7</div>
+        <div class="week-title">No Marketing for 6 Months</div>
+        <div class="kpi-desc">You think "I'll market when the product is done." The product is never done. Start your LinkedIn content in Week 1 — before you write a single line of code. Build in public from Day 1. By the time you launch, you should have a warm audience of 500+ people who know who you are.</div>
+      </div>
+      <div class="week-card phase4">
+        <div class="week-num">Fatal Mistake #8</div>
+        <div class="week-title">Ignoring Churn</div>
+        <div class="kpi-desc">10 users sign up. 6 cancel after 30 days. Most founders ignore the 6 and focus on getting 10 more. This is wrong. Interview every single person who cancels. The reason they leave is your most valuable business intelligence. Fix that reason before acquiring new users.</div>
+      </div>
+      <div class="week-card phase4">
+        <div class="week-num">Fatal Mistake #9</div>
+        <div class="week-title">Raising Money Too Early</div>
+        <div class="kpi-desc">Raising $500K before you have 10 customers seems great. It's often fatal. You hire people before you understand the business. You spend on marketing before you know what channel works. Money amplifies both good and bad. Get to $1K MRR first. Then raise.</div>
+      </div>
+      <div class="week-card phase4">
+        <div class="week-num">Fatal Mistake #10</div>
+        <div class="week-title">Working Alone in Silence</div>
+        <div class="kpi-desc">Join YC's Startup School (free). Join founder communities on Slack (OnDeck, South Park Commons). Find 3 other solo founders and do a weekly check-in call. Your mental health matters. Isolation kills momentum. Share your wins and losses publicly — it attracts customers and investors.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="sec-label">Your Founder Reading List</div>
+  <div class="g2">
+    <ul class="cl">
+      <li><strong style="color:var(--text)">The Mom Test</strong> — Rob Fitzpatrick. How to talk to users without getting lied to. Read in Week 1.</li>
+      <li><strong style="color:var(--text)">Zero to One</strong> — Peter Thiel. How to build a monopoly. Chapter 5 especially.</li>
+      <li><strong style="color:var(--text)">The Lean Startup</strong> — Eric Ries. Build-Measure-Learn loop. Your operating model.</li>
+      <li><strong style="color:var(--text)">Paul Graham Essays</strong> — pg.com. Free. "Do Things That Don't Scale" is required reading.</li>
+    </ul>
+    <ul class="cl">
+      <li><strong style="color:var(--text)">YC Startup School</strong> — free.startup.school — 10 weeks of Silicon Valley MBA online</li>
+      <li><strong style="color:var(--text)">Indie Hackers Podcast</strong> — Real stories from solo founders hitting $10K–$100K MRR</li>
+      <li><strong style="color:var(--text)">How to Start a Startup (YC/Stanford)</strong> — Free on YouTube. Watch all 20 lectures.</li>
+      <li><strong style="color:var(--text)">SaaStr Annual talks</strong> — Free on YouTube. Best SaaS growth content in the world.</li>
+    </ul>
+  </div>
+
+  <div style="text-align:center;padding:50px 0;border-top:1px solid var(--border);margin-top:40px;">
+    <div style="font-family:'Syne',sans-serif;font-size:13px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Your Co-Founder Says</div>
+    <div style="font-family:'Lora',serif;font-style:italic;font-size:22px;color:var(--text);max-width:600px;margin:0 auto;line-height:1.6;">"You have everything you need. The gap exists. The market is ready. The tools are available. The only variable left is you — showing up every day for the next 12 months."</div>
+    <div style="margin-top:24px;font-size:11px;color:var(--accent);letter-spacing:0.15em;text-transform:uppercase;">LexAI · Startup OS · Built by Your AI Co-Founder</div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

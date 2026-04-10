@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>$1B Startup Blueprint — Your Co-Founder's Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a08;
+    --cream: #f5f0e8;
+    --gold: #c9a84c;
+    --gold-light: #e8d48a;
+    --red: #c94c4c;
+    --green: #4ca86b;
+    --blue: #4c7fc9;
+    --text: #1a1a14;
+    --muted: #6b6b5a;
+    --border: rgba(201,168,76,0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* GRAIN OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 60px 60px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .co-founder-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid var(--border);
+    padding: 6px 16px;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 30px;
+  }
+
+  .co-founder-badge::before {
+    content: '●';
+    color: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 6vw, 80px);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--cream);
+    margin-bottom: 12px;
+  }
+
+  h1 span { color: var(--gold); font-style: italic; }
+
+  .header-sub {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    margin-top: 16px;
+    max-width: 600px;
+  }
+
+  .date-stamp {
+    position: absolute;
+    top: 60px; right: 60px;
+    text-align: right;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* NAV TABS */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 0 60px;
+    overflow-x: auto;
+  }
+
+  .tab {
+    padding: 16px 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+  }
+
+  .tab:hover { color: var(--cream); }
+  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* CONTENT */
+  .content { display: none; padding: 50px 60px; animation: fadeIn 0.4s ease; }
+  .content.active { display: block; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* SECTION TITLES */
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 32px;
+    line-height: 1.2;
+  }
+
+  /* GRID LAYOUTS */
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 40px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
+
+  /* CARDS */
+  .card {
+    background: rgba(245,240,232,0.04);
+    border: 1px solid var(--border);
+    padding: 28px;
+    position: relative;
+    transition: all 0.3s;
+  }
+
+  .card:hover {
+    background: rgba(245,240,232,0.07);
+    border-color: rgba(201,168,76,0.5);
+    transform: translateY(-2px);
+  }
+
+  .card-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .card-label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .card-desc { font-size: 12px; color: rgba(245,240,232,0.7); line-height: 1.6; }
+
+  /* IDEA CARDS */
+  .idea-card {
+    background: rgba(245,240,232,0.03);
+    border: 1px solid var(--border);
+    padding: 32px;
+    margin-bottom: 20px;
+    position: relative;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .idea-card:hover {
+    background: rgba(245,240,232,0.06);
+    border-color: rgba(201,168,76,0.6);
+  }
+
+  .idea-card.featured {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.06);
+  }
+
+  .idea-card.featured::before {
+    content: '★ RECOMMENDED';
+    position: absolute;
+    top: -1px; right: 24px;
+    background: var(--gold);
+    color: var(--black);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    padding: 4px 12px;
+  }
+
+  .idea-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    gap: 20px;
+  }
+
+  .idea-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+
+  .idea-subtitle { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; }
+
+  .idea-market {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .idea-market-size {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .idea-market-label { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  .idea-body { font-size: 12px; color: rgba(245,240,232,0.75); line-height: 1.7; margin-bottom: 20px; }
+
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+
+  .tag {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border: 1px solid;
+  }
+
+  .tag-green { border-color: var(--green); color: var(--green); }
+  .tag-blue { border-color: var(--blue); color: var(--blue); }
+  .tag-red { border-color: var(--red); color: var(--red); }
+  .tag-gold { border-color: var(--gold); color: var(--gold); }
+
+  .metrics-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+  }
+
+  .metric-item { text-align: center; }
+  .metric-val { font-size: 18px; font-weight: 500; color: var(--cream); }
+  .metric-key { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+
+  /* ROADMAP */
+  .roadmap-phase {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+    position: relative;
+  }
+
+  .roadmap-phase::after {
+    content: '';
+    position: absolute;
+    left: 49px;
+    top: 50px;
+    bottom: -30px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .roadmap-phase:last-child::after { display: none; }
+
+  .phase-label {
+    text-align: center;
+    padding-top: 8px;
+  }
+
+  .phase-num {
+    width: 40px; height: 40px;
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--gold);
+    margin: 0 auto 8px;
+  }
+
+  .phase-time { font-size: 10px; color: var(--muted); text-align: center; }
+
+  .phase-content {
+    background: rgba(245,240,232,0.03);
+    border: 1px solid var(--border);
+    padding: 24px;
+  }
+
+  .phase-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 12px;
+  }
+
+  .checklist { list-style: none; }
+  .checklist li { font-size: 12px; color: rgba(245,240,232,0.7); padding: 4px 0; }
+  .checklist li::before { content: '→ '; color: var(--gold); }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* QUOTE */
+  .insight-box {
+    border-left: 3px solid var(--gold);
+    padding: 20px 28px;
+    background: rgba(201,168,76,0.05);
+    margin: 24px 0;
+    font-family: 'Instrument Serif', serif;
+    font-size: 17px;
+    font-style: italic;
+    color: rgba(245,240,232,0.85);
+    line-height: 1.6;
+  }
+
+  /* TABLE */
+  .comp-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+  .comp-table th {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .comp-table td {
+    padding: 14px 16px;
+    font-size: 12px;
+    color: rgba(245,240,232,0.75);
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+    vertical-align: top;
+  }
+  .comp-table tr:hover td { background: rgba(245,240,232,0.03); }
+
+  /* PROGRESS BARS */
+  .progress-item { margin-bottom: 16px; }
+  .progress-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 12px; }
+  .progress-bar { height: 3px; background: rgba(245,240,232,0.1); }
+  .progress-fill { height: 100%; background: var(--gold); transition: width 1s ease; }
+
+  /* REVENUE MODEL */
+  .rev-card {
+    background: rgba(245,240,232,0.03);
+    border: 1px solid var(--border);
+    padding: 24px;
+    text-align: center;
+  }
+
+  .rev-icon { font-size: 28px; margin-bottom: 12px; }
+  .rev-title { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--cream); margin-bottom: 8px; }
+  .rev-desc { font-size: 11px; color: var(--muted); line-height: 1.6; }
+  .rev-amount { font-size: 22px; font-family: 'Playfair Display', serif; color: var(--gold); margin-top: 12px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .header, .tabs, .content { padding-left: 24px; padding-right: 24px; }
+    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .metrics-row { grid-template-columns: repeat(2, 1fr); }
+    .date-stamp { display: none; }
+  }
+  @media (max-width: 600px) {
+    .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .idea-header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="co-founder-badge">Co-Founder AI · Active</div>
+  <div class="date-stamp">March 2026<br><span style="color:var(--gold)">Confidential</span></div>
+  <h1>The <span>$1 Billion</span><br>Startup Blueprint</h1>
+  <p class="header-sub">Deep market analysis across USA & Europe. Real gaps. Real strategies. Built with insights from Y Combinator, Silicon Valley VCs, and frontier market data.</p>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="show('overview')">01 · Market Overview</button>
+  <button class="tab" onclick="show('ideas')">02 · Top 5 Ideas</button>
+  <button class="tab" onclick="show('winner')">03 · The Winner</button>
+  <button class="tab" onclick="show('roadmap')">04 · Roadmap</button>
+  <button class="tab" onclick="show('money')">05 · Revenue Model</button>
+  <button class="tab" onclick="show('funding')">06 · Funding Strategy</button>
+</div>
+
+<!-- TAB 1: OVERVIEW -->
+<div id="overview" class="content active">
+  <div class="section-label">Market Intelligence</div>
+  <div class="section-title">Where the Money Is<br>Waiting to Be Made</div>
+
+  <div class="grid-4">
+    <div class="card">
+      <div class="card-number">$51B</div>
+      <div class="card-label">FinTech VC 2025</div>
+      <div class="card-desc">Global venture capital into fintech — up 27% from 2024. Massive capital availability.</div>
+    </div>
+    <div class="card">
+      <div class="card-number">70%</div>
+      <div class="card-label">YC Batch Is AI</div>
+      <div class="card-desc">Spring 2025: 70+ AI companies across 18 categories funded in ONE YC batch alone.</div>
+    </div>
+    <div class="card">
+      <div class="card-number">$200B</div>
+      <div class="card-label">Last-Mile Delivery</div>
+      <div class="card-desc">Only 1 YC company targets this market. Enormous gap = enormous opportunity.</div>
+    </div>
+    <div class="card">
+      <div class="card-number">$457B</div>
+      <div class="card-label">Online Learning by 2026</div>
+      <div class="card-desc">EdTech is exploding but quality depth products are missing at scale.</div>
+    </div>
+  </div>
+
+  <div class="insight-box">
+    "The most important part of building a product is figuring out what to build in the first place. AI tools like Cursor and Claude Code are great at writing code — but deciding WHAT to build is still entirely human." — Y Combinator Spring 2026 RFS
+  </div>
+
+  <div class="section-label" style="margin-top:40px">YC's Hottest Sectors Right Now</div>
+
+  <div style="margin-bottom:40px">
+    <div class="progress-item">
+      <div class="progress-header"><span>Agentic AI / AI Workflows</span><span style="color:var(--gold)">95%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:95%"></div></div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header"><span>FinTech / Stablecoins</span><span style="color:var(--gold)">88%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:88%"></div></div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header"><span>Healthcare + AI</span><span style="color:var(--gold)">82%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:82%"></div></div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header"><span>Defense / Government Tech</span><span style="color:var(--gold)">78%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header"><span>US Manufacturing Revival</span><span style="color:var(--gold)">72%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
+    </div>
+    <div class="progress-item">
+      <div class="progress-header"><span>Climate / Clean Energy</span><span style="color:var(--gold)">65%</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-label">USA vs Europe Gap Analysis</div>
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Sector</th>
+        <th>USA Status</th>
+        <th>Europe Gap</th>
+        <th>Opportunity Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong style="color:var(--cream)">AI for SMBs</strong></td>
+        <td>Rapidly saturating</td>
+        <td>Massively underserved — 25M+ European SMBs have zero AI tools</td>
+        <td style="color:var(--gold)">★★★★★</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--cream)">Healthcare AI</strong></td>
+        <td>Funded but complex regulation</td>
+        <td>EU healthcare systems desperate for AI — NHS, German hospitals severely underfunded</td>
+        <td style="color:var(--gold)">★★★★★</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--cream)">B2B FinTech</strong></td>
+        <td>Mature market</td>
+        <td>European cross-border payments still costly; 27-country complexity = moat</td>
+        <td style="color:var(--gold)">★★★★☆</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--cream)">Legal Tech</strong></td>
+        <td>Growing fast</td>
+        <td>European legal market ($100B+) is barely digitized — massive gap</td>
+        <td style="color:var(--gold)">★★★★★</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--cream)">PropTech</strong></td>
+        <td>Well funded</td>
+        <td>European real estate ($10T market) lacks data layers and AI tools</td>
+        <td style="color:var(--gold)">★★★★☆</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--cream)">Mental Health Tech</strong></td>
+        <td>Growing rapidly</td>
+        <td>EU has 84M people with mental health issues, only 3% receive adequate care</td>
+        <td style="color:var(--gold)">★★★★★</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- TAB 2: IDEAS -->
+<div id="ideas" class="content">
+  <div class="section-label">Top 5 Validated Ideas</div>
+  <div class="section-title">Market Gaps With<br>Billion-Dollar Potential</div>
+
+  <!-- IDEA 1 -->
+  <div class="idea-card featured">
+    <div class="idea-header">
+      <div>
+        <div class="idea-title">⚖️ AI Legal Co-Pilot for SMBs</div>
+        <div class="idea-subtitle">USA + EU · B2B SaaS · Legal Tech</div>
+      </div>
+      <div class="idea-market">
+        <div class="idea-market-size">$1.2T</div>
+        <div class="idea-market-label">Total Market</div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-gold">YC Fundable</span>
+      <span class="tag tag-green">Low Competition</span>
+      <span class="tag tag-blue">Recurring Revenue</span>
+      <span class="tag tag-red">Urgent Need</span>
+    </div>
+    <div class="idea-body">
+      Small businesses spend $30B/year on legal fees in the USA alone — yet 76% cannot afford a proper lawyer. In Europe, the problem is 5× worse: 27 different legal systems, language barriers, and zero modern tooling. An AI co-pilot that handles contracts, compliance checks, employment law, GDPR, and cross-border regulations — at $99/month — disrupts the entire legal services industry. LegalZoom is outdated. Harvey AI targets big law. The SMB gap is wide open. This is your lane.
+    </div>
+    <div class="metrics-row">
+      <div class="metric-item"><div class="metric-val">$99–$499</div><div class="metric-key">Monthly Price</div></div>
+      <div class="metric-item"><div class="metric-val">33M</div><div class="metric-key">Target Businesses</div></div>
+      <div class="metric-item"><div class="metric-val">18 mo</div><div class="metric-key">Time to $1M ARR</div></div>
+      <div class="metric-item"><div class="metric-val">85%</div><div class="metric-key">Gross Margin</div></div>
+    </div>
+  </div>
+
+  <!-- IDEA 2 -->
+  <div class="idea-card">
+    <div class="idea-header">
+      <div>
+        <div class="idea-title">🧠 AI Mental Health Platform</div>
+        <div class="idea-subtitle">USA + EU · B2C/B2B · HealthTech</div>
+      </div>
+      <div class="idea-market">
+        <div class="idea-market-size">$600B</div>
+        <div class="idea-market-label">Total Market</div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-green">Crisis Demand</span>
+      <span class="tag tag-blue">Insurance Billable</span>
+      <span class="tag tag-gold">YC Backed Sector</span>
+    </div>
+    <div class="idea-body">
+      84 million Europeans and 50 million Americans struggle with mental health conditions. Only 3% receive adequate care. Therapists cost $200+/hour, wait times are 6+ months. An AI-first mental wellness platform — combining CBT (Cognitive Behavioral Therapy) delivered by AI agents, human therapist escalation, and employer wellness programs — can be sold to HR departments at $20/employee/month. Think Calm meets clinical care meets B2B distribution.
+    </div>
+    <div class="metrics-row">
+      <div class="metric-item"><div class="metric-val">$20/mo</div><div class="metric-key">Per Seat B2B</div></div>
+      <div class="metric-item"><div class="metric-val">134M</div><div class="metric-key">Underserved People</div></div>
+      <div class="metric-item"><div class="metric-val">24 mo</div><div class="metric-key">Time to $1M ARR</div></div>
+      <div class="metric-item"><div class="metric-val">78%</div><div class="metric-key">Gross Margin</div></div>
+    </div>
+  </div>
+
+  <!-- IDEA 3 -->
+  <div class="idea-card">
+    <div class="idea-header">
+      <div>
+        <div class="idea-title">🏭 AI for European Manufacturing</div>
+        <div class="idea-subtitle">EU · B2B Enterprise · Industrial AI</div>
+      </div>
+      <div class="idea-market">
+        <div class="idea-market-size">$800B</div>
+        <div class="idea-market-label">Total Market</div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-gold">YC 2026 RFS Listed</span>
+      <span class="tag tag-green">High Deal Size</span>
+      <span class="tag tag-blue">Government Backed</span>
+    </div>
+    <div class="idea-body">
+      Germany, France, and Italy have 2M+ manufacturing businesses. They're losing to China and South Korea because they run on paper and legacy ERPs from 2005. YC Spring 2026 specifically called out "modernizing industrial systems." An AI platform for production planning, quality control via computer vision, predictive maintenance, and supply chain optimization — sold at $2,000–$10,000/month — can scale to $1B with just 10,000 customers.
+    </div>
+    <div class="metrics-row">
+      <div class="metric-item"><div class="metric-val">$5K/mo</div><div class="metric-key">Avg Contract</div></div>
+      <div class="metric-item"><div class="metric-val">2M+</div><div class="metric-key">EU Manufacturers</div></div>
+      <div class="metric-item"><div class="metric-val">30 mo</div><div class="metric-key">Time to $1M ARR</div></div>
+      <div class="metric-item"><div class="metric-val">72%</div><div class="metric-key">Gross Margin</div></div>
+    </div>
+  </div>
+
+  <!-- IDEA 4 -->
+  <div class="idea-card">
+    <div class="idea-header">
+      <div>
+        <div class="idea-title">💳 Cross-Border Stablecoin Finance</div>
+        <div class="idea-subtitle">USA + EU · FinTech · Crypto-Native</div>
+      </div>
+      <div class="idea-market">
+        <div class="idea-market-size">$3.2T</div>
+        <div class="idea-market-label">Total Market</div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-gold">YC 2026 RFS #1</span>
+      <span class="tag tag-red">High Competition</span>
+      <span class="tag tag-green">Regulatory Tailwind</span>
+    </div>
+    <div class="idea-body">
+      YC's #1 Spring 2026 request. GENIUS and CLARITY Acts are creating a new regulatory middle ground — stablecoins that are compliant but crypto-native. Businesses still pay 2–5% on international transfers. A financial infrastructure company that offers yield-bearing stablecoin accounts, instant cross-border B2B payments, and DeFi-grade returns within regulatory compliance can capture massive value.
+    </div>
+    <div class="metrics-row">
+      <div class="metric-item"><div class="metric-val">0.5–1%</div><div class="metric-key">Transaction Fee</div></div>
+      <div class="metric-item"><div class="metric-val">$2.8T</div><div class="metric-key">Cross-border Vol</div></div>
+      <div class="metric-item"><div class="metric-val">36 mo</div><div class="metric-key">Time to $1M ARR</div></div>
+      <div class="metric-item"><div class="metric-val">60%</div><div class="metric-key">Gross Margin</div></div>
+    </div>
+  </div>
+
+  <!-- IDEA 5 -->
+  <div class="idea-card">
+    <div class="idea-header">
+      <div>
+        <div class="idea-title">📦 AI-Powered Last-Mile Delivery OS</div>
+        <div class="idea-subtitle">USA · Logistics · Infrastructure SaaS</div>
+      </div>
+      <div class="idea-market">
+        <div class="idea-market-size">$200B</div>
+        <div class="idea-market-label">Total Market</div>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag tag-green">Zero YC Competition</span>
+      <span class="tag tag-blue">High Switching Cost</span>
+    </div>
+    <div class="idea-body">
+      YC analysis found 144 companies building AI agents but only ONE targeting the $200B last-mile delivery market. That is an astonishing gap. An operating system for delivery businesses — route optimization, driver management, customer communication, returns handling, sustainability reporting — sold to regional courier companies and retailers. UPS and FedEx are too slow. Startups need this layer desperately.
+    </div>
+    <div class="metrics-row">
+      <div class="metric-item"><div class="metric-val">$1K/mo</div><div class="metric-key">Per Client</div></div>
+      <div class="metric-item"><div class="metric-val">45K+</div><div class="metric-key">US Courier Co.</div></div>
+      <div class="metric-item"><div class="metric-val">20 mo</div><div class="metric-key">Time to $1M ARR</div></div>
+      <div class="metric-item"><div class="metric-val">80%</div><div class="metric-key">Gross Margin</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: THE WINNER -->
+<div id="winner" class="content">
+  <div class="section-label">Co-Founder's Recommendation</div>
+  <div class="section-title">Build This.<br>It's Your Billion.</div>
+
+  <div class="insight-box">
+    After analyzing 6 major market gaps, YC's 2026 request list, and cross-referencing USA + Europe demand — my recommendation is the AI Legal Co-Pilot for SMBs. Here's the full strategic case.
+  </div>
+
+  <div class="grid-2" style="margin-top:32px">
+    <div class="card">
+      <div class="card-label">Why This Wins</div>
+      <ul class="checklist" style="margin-top:8px">
+        <li>33 million underserved SMBs in USA + EU</li>
+        <li>No strong AI-native competitor in SMB segment</li>
+        <li>Harvey AI targets BigLaw → SMBs are orphaned</li>
+        <li>LegalZoom = static forms, not AI intelligence</li>
+        <li>Compliance needs create subscription lock-in</li>
+        <li>GDPR, EU AI Act create urgent European demand</li>
+        <li>High willingness to pay (saves $5K+ in legal fees)</li>
+        <li>Partnership paths: accountants, banks, insurers</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-label">Product Vision: LexAI</div>
+      <ul class="checklist" style="margin-top:8px">
+        <li>AI contract generation & review in seconds</li>
+        <li>Plain-language legal Q&A (employment, tax, IP)</li>
+        <li>GDPR compliance audit & risk dashboard</li>
+        <li>Employment law — hire/fire safely</li>
+        <li>1-click NDAs, partnership agreements, terms</li>
+        <li>Escalation to verified lawyers when needed</li>
+        <li>Multi-language: English, German, French, Spanish</li>
+        <li>Integrates with QuickBooks, Xero, Shopify</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-label">Competitive Landscape</div>
+  <table class="comp-table">
+    <thead>
+      <tr><th>Competitor</th><th>Focus</th><th>Weakness</th><th>Our Edge</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong style="color:var(--cream)">Harvey AI</strong></td>
+        <td>BigLaw, Fortune 500</td>
+        <td>$50K+ contracts, no SMB</td>
+        <td style="color:var(--green)">We own the SMB segment entirely</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--cream)">LegalZoom</strong></td>
+        <td>DIY legal forms</td>
+        <td>Static, not AI-powered, US only</td>
+        <td style="color:var(--green)">AI intelligence + EU coverage</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--cream)">Rocket Lawyer</strong></td>
+        <td>Document templates</td>
+        <td>No AI, no compliance, no EU</td>
+        <td style="color:var(--green)">10x better product at same price</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--cream)">Ironclad</strong></td>
+        <td>Enterprise CLM</td>
+        <td>Too complex for small businesses</td>
+        <td style="color:var(--green)">Simple, fast, built for founders</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="divider">
+
+  <div class="section-label">Path to $1 Billion Valuation</div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-number">Year 1</div>
+      <div class="card-label">$1M ARR · Seed Stage</div>
+      <div class="card-desc">1,000 paying customers at $99/month. USA only. Raise $2M seed from YC or angels. Validate product-market fit with 100 beta users first.</div>
+    </div>
+    <div class="card">
+      <div class="card-number">Year 3</div>
+      <div class="card-label">$20M ARR · Series A</div>
+      <div class="card-desc">20,000 customers. Expand to UK and Germany. Add enterprise tier at $499/month. Raise $15M Series A. 50-person team.</div>
+    </div>
+    <div class="card">
+      <div class="card-number">Year 5</div>
+      <div class="card-label">$100M ARR · Series C</div>
+      <div class="card-desc">100,000 customers across USA + EU. Valuation at 10x ARR = $1 Billion. Add marketplace of vetted lawyers. IPO or acquisition path opens.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: ROADMAP -->
+<div id="roadmap" class="content">
+  <div class="section-label">Execution Plan</div>
+  <div class="section-title">From Zero to<br>Unicorn — Step by Step</div>
+
+  <div class="roadmap-phase">
+    <div class="phase-label">
+      <div class="phase-num">1</div>
+      <div class="phase-time">Months 1–3</div>
+    </div>
+    <div class="phase-content">
+      <div class="phase-title">Foundation & Validation</div>
+      <ul class="checklist">
+        <li>Interview 100 small business owners about legal pain points</li>
+        <li>Build MVP using Claude API + legal databases (Westlaw, EUR-Lex)</li>
+        <li>Launch with just 3 features: contract review, Q&A, NDA generator</li>
+        <li>Get 50 free beta users, collect intense feedback</li>
+        <li>Apply to Y Combinator Winter 2027 batch</li>
+        <li>Register company as Delaware C-Corp (for US investors)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="roadmap-phase">
+    <div class="phase-label">
+      <div class="phase-num">2</div>
+      <div class="phase-time">Months 4–9</div>
+    </div>
+    <div class="phase-content">
+      <div class="phase-title">Launch & First Revenue</div>
+      <ul class="checklist">
+        <li>Launch paid plans: $49/mo (solo) · $99/mo (team) · $299/mo (pro)</li>
+        <li>Target first 500 paying customers via LinkedIn + cold outreach to founders</li>
+        <li>Content strategy: "Legal 101 for Founders" — become the trusted source</li>
+        <li>Raise $1–2M pre-seed from angels or YC ($500K standard deal)</li>
+        <li>Hire 2 engineers + 1 legal content expert</li>
+        <li>Integrate with Stripe, QuickBooks, and DocuSign</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="roadmap-phase">
+    <div class="phase-label">
+      <div class="phase-num">3</div>
+      <div class="phase-time">Months 10–18</div>
+    </div>
+    <div class="phase-content">
+      <div class="phase-title">Scale USA + Enter Europe</div>
+      <ul class="checklist">
+        <li>Reach 2,000 customers → $200K MRR milestone</li>
+        <li>Launch UK version (GDPR + employment law focus)</li>
+        <li>Launch Germany version (GmbH law, Datenschutz, labour law)</li>
+        <li>Build lawyer marketplace for escalations (take 20% commission)</li>
+        <li>Raise $5–10M Series A from a16z, Bessemer, or Index Ventures (EU)</li>
+        <li>Team grows to 20 people across product, legal, sales, engineering</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="roadmap-phase">
+    <div class="phase-label">
+      <div class="phase-num">4</div>
+      <div class="phase-time">Year 3–5</div>
+    </div>
+    <div class="phase-content">
+      <div class="phase-title">Category Leadership</div>
+      <ul class="checklist">
+        <li>100,000 customers — become the "Salesforce of SMB Legal"</li>
+        <li>Expand across 10+ EU countries with localized legal knowledge</li>
+        <li>Launch LexAI for Accountants — partner channel distributes for you</li>
+        <li>Raise Series B/C at $200–500M valuation</li>
+        <li>Enterprise API: let banks and insurers embed legal AI into their products</li>
+        <li>Explore IPO or strategic acquisition by Thomson Reuters / LexisNexis</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: REVENUE -->
+<div id="money" class="content">
+  <div class="section-label">Business Model</div>
+  <div class="section-title">Multiple Revenue Streams<br>Built for Scale</div>
+
+  <div class="grid-3">
+    <div class="rev-card">
+      <div class="rev-icon">💎</div>
+      <div class="rev-title">SaaS Subscriptions</div>
+      <div class="rev-desc">Monthly/annual plans from $49 to $499/month. Main engine. Predictable, recurring, high-margin revenue that VCs love.</div>
+      <div class="rev-amount">Year 3: $15M ARR</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-icon">⚖️</div>
+      <div class="rev-title">Lawyer Marketplace</div>
+      <div class="rev-desc">When AI can't handle it, connect users to verified lawyers. 20% commission on each engagement. No overhead — pure margin.</div>
+      <div class="rev-amount">Year 3: $3M ARR</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-icon">🔌</div>
+      <div class="rev-title">API / White Label</div>
+      <div class="rev-desc">Banks, accountants, and HR platforms embed your legal AI. Pay per API call or flat enterprise license. Massive leverage.</div>
+      <div class="rev-amount">Year 3: $2M ARR</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-label">Financial Model (Conservative)</div>
+  <table class="comp-table">
+    <thead>
+      <tr><th>Milestone</th><th>Customers</th><th>MRR</th><th>ARR</th><th>Valuation (10x ARR)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Month 6</td><td>200</td><td>$15K</td><td>$180K</td><td>$1.8M</td></tr>
+      <tr><td>Month 12</td><td>800</td><td>$80K</td><td>$960K</td><td>$9.6M</td></tr>
+      <tr><td>Month 18</td><td>2,000</td><td>$200K</td><td>$2.4M</td><td>$24M</td></tr>
+      <tr><td>Year 3</td><td>10,000</td><td>$1M</td><td>$12M</td><td>$120M</td></tr>
+      <tr><td style="color:var(--gold)"><strong>Year 5</strong></td><td style="color:var(--gold)"><strong>80,000</strong></td><td style="color:var(--gold)"><strong>$8M</strong></td><td style="color:var(--gold)"><strong>$96M</strong></td><td style="color:var(--gold)"><strong>$960M → $1B+</strong></td></tr>
+    </tbody>
+  </table>
+
+  <div class="insight-box">
+    At 80,000 SMB customers paying an average of $100/month, you hit $96M ARR. At a 10x revenue multiple (standard for high-growth SaaS), that is a $960 million valuation. Add the marketplace revenue and API licensing, and you cross $1 billion comfortably.
+  </div>
+</div>
+
+<!-- TAB 6: FUNDING -->
+<div id="funding" class="content">
+  <div class="section-label">Investor Strategy</div>
+  <div class="section-title">How to Raise Capital<br>the Silicon Valley Way</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-label">Stage 1 · Pre-Seed ($500K–$2M)</div>
+      <div class="card-desc" style="margin-top:12px; font-size:13px; line-height:1.8;">
+        <strong style="color:var(--gold)">Apply to Y Combinator.</strong> Their standard deal is $500K for 7% equity. Even beyond money, the YC brand opens every VC door.<br><br>
+        <strong style="color:var(--cream)">Target angels:</strong> Former lawyers, legal tech founders, startup operators who understand the pain. Use AngelList and LinkedIn.<br><br>
+        <strong style="color:var(--cream)">Key metric to show:</strong> 100 paying customers with positive NPS and low churn.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Stage 2 · Seed ($2M–$5M)</div>
+      <div class="card-desc" style="margin-top:12px; font-size:13px; line-height:1.8;">
+        <strong style="color:var(--gold)">Target:</strong> Gradient Ventures (Google's AI fund), Bessemer Venture Partners, General Catalyst.<br><br>
+        <strong style="color:var(--cream)">For Europe:</strong> Northzone, Index Ventures, Balderton Capital. These firms specifically back EU-focused SaaS.<br><br>
+        <strong style="color:var(--cream)">Key metric to show:</strong> $1M ARR, 20% MoM growth, 3-country expansion plan.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Stage 3 · Series A ($10M–$20M)</div>
+      <div class="card-desc" style="margin-top:12px; font-size:13px; line-height:1.8;">
+        <strong style="color:var(--gold)">Target:</strong> Andreessen Horowitz (a16z) — they have a dedicated legal tech thesis. Sequoia Capital, Accel.<br><br>
+        <strong style="color:var(--cream)">Key metrics:</strong> $5M+ ARR, net revenue retention above 115%, CAC payback under 12 months.<br><br>
+        <strong style="color:var(--cream)">Story:</strong> "We are building the legal OS for the 33 million SMBs that BigLaw ignores."
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">The Pitch Formula</div>
+      <div class="card-desc" style="margin-top:12px; font-size:13px; line-height:1.8;">
+        <strong style="color:var(--gold)">Problem:</strong> SMBs pay $30B/year in legal fees or operate with legal risk.<br><br>
+        <strong style="color:var(--gold)">Solution:</strong> AI legal co-pilot at 1/100th the cost of a lawyer.<br><br>
+        <strong style="color:var(--gold)">Market:</strong> 33M businesses, $1.2T total legal spend.<br><br>
+        <strong style="color:var(--gold)">Traction:</strong> X customers, $Y MRR, Z% month-over-month growth.<br><br>
+        <strong style="color:var(--gold)">Ask:</strong> $X to reach $Y ARR milestone in 18 months.
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-label">First 30 Days — Your Action Plan</div>
+  <div class="card" style="max-width:700px">
+    <ul class="checklist">
+      <li><strong>Week 1:</strong> Interview 20 small business owners about legal frustrations (find them on LinkedIn)</li>
+      <li><strong>Week 2:</strong> Build a landing page and waitlist — validate demand before writing code</li>
+      <li><strong>Week 2:</strong> Set up the legal entity — Delaware C-Corp via Stripe Atlas ($500)</li>
+      <li><strong>Week 3:</strong> Build a prototype using Claude API to analyze contracts — show it to 10 people</li>
+      <li><strong>Week 3:</strong> Start your YC application — deadline research and storytelling begins now</li>
+      <li><strong>Week 4:</strong> Get your first 10 paying beta customers, even at $10/month</li>
+      <li><strong>Week 4:</strong> Begin content strategy — write "Legal checklist for startups" and distribute</li>
+      <li><strong>Ongoing:</strong> Talk to users every single day — this is the YC and Silicon Valley secret</li>
+    </ul>
+  </div>
+
+  <div class="insight-box" style="margin-top:40px">
+    "Make something people want. Talk to users. Do things that don't scale." — Paul Graham, YC Founder. The companies that make it to $1B didn't predict the future — they solved a real, painful, expensive problem for real people and kept iterating until it was undeniable.
+  </div>
+
+  <div style="text-align:center; padding:40px 0; border-top:1px solid var(--border); margin-top:40px">
+    <div style="font-family:'Playfair Display',serif; font-size:28px; color:var(--gold); margin-bottom:8px">Your co-founder is ready.</div>
+    <div style="font-size:12px; color:var(--muted); letter-spacing:0.08em">Let's build this together. Ask me anything about the strategy, pitch, product, or first steps.</div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
