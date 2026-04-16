@@ -1,10 +1,6 @@
 {
   "version": 2,
-  "outputDirectory": ".",
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
+  "builds": [
+    { "src": "*.html", "use": "@vercel/static" }
   ]
 }
